@@ -35,3 +35,13 @@ p {
 #note h6 {
     @apply text-base text-sky-500;
 }
+
+#note table {
+    @apply table-auto border border-black;
+}
+#note th {
+    @apply border-2 border-zinc-900 px-2 py-1;
+}
+#note td {
+    @apply border-2 border-zinc-900 px-2 py-1;
+}
