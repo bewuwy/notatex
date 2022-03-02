@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <%- include('partials/head', { title: title }); %>
+    </head>
+    <body class="bg-slate-800 text-white
+                   w-10/12 md:w-1/2 mx-auto mt-12">
+
+        <div class="mb-24">
+            <div class="mb-12">
+                <%- include('partials/logo'); %>
+            </div>
+
+            <h1 class="mb-10"><%= title %></h1>
+
+            <div id="note">
+                <%- content %>
+            </div>
+        </div>
+    </body>
+</html>

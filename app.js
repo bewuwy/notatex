@@ -1,7 +1,18 @@
 const express = require('express');
 const path = require('path');
+
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+
+const axios = require('axios');
+
+const { Remarkable } = require('remarkable');
+
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
 const app = express();
 
@@ -19,6 +30,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 // index
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
+
+// notes
+app.get('/note/:title', (req, res) => {
+  // get note from github repo
+  axios
+      .get(`https://raw.githubusercontent.com/bewu-ib/digital-garden/master/_notes/${req.params["title"]}.md`)
+      .then(aRes => {
+          const md = new Remarkable();
+
+          let note = md.render(aRes.data);
+          note = DOMPurify.sanitize(note);
+
+          res.render("note", { title: req.params["title"], content: note });
+      })
+      .catch(error => {
+          console.error(error);
+          res.send(error.toString());
+  });
+});
 
 // catch 404
 app.use(function(req, res) {

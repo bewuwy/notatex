@@ -5,3 +5,33 @@
 h1 {
     @apply text-4xl mb-4 font-bold;
 }
+
+p {
+    @apply my-2;
+}
+
+#note ul {
+    @apply list-disc;
+}
+
+#note h1, h2, h3, h4, h5, h6 {
+    @apply font-bold my-3;
+}
+#note h1 {
+    @apply text-3xl text-red-500;
+}
+#note h2 {
+    @apply text-2xl text-orange-500;
+}
+#note h3 {
+    @apply text-xl text-yellow-500;
+}
+#note h4 {
+    @apply text-lg text-lime-600;
+}
+#note h5 {
+    @apply text-base text-emerald-500;
+}
+#note h6 {
+    @apply text-base text-sky-500;
+}
