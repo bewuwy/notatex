@@ -43,7 +43,7 @@ app.get('/note/:title', (req, res) => {
           note = DOMPurify.sanitize(note);
 
           let title = req.params["title"];
-          title = title.replace('-', " ");
+          title = title.replaceAll('-', " ");
 
           res.render("note", { title: title, content: note });
       })
