@@ -1,3 +1,5 @@
+//imports
+
 const express = require('express');
 const path = require('path');
 
@@ -10,9 +12,9 @@ const { Remarkable } = require('remarkable');
 
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
-
 const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
+
 
 const app = express();
 
@@ -27,9 +29,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+// firebase setup
+const admin = require('firebase-admin');
+const serviceAccount = process.env.FIREBASE_PRIVATE;
+
+admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(serviceAccount))
+});
+
+
 // index
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
+
+
+// login
+app.get("/login", (req, res) => {
+   res.render("login");
+});
+
 
 // notes
 app.get('/note/:title', (req, res) => {
