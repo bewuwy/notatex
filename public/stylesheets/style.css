@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    @apply w-full min-h-full;
+}
+
 h1 {
     @apply text-4xl mb-4 font-bold;
 }
