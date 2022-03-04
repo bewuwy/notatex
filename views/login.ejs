@@ -5,7 +5,7 @@
 
         <!--  logged in/out handler  -->
         <script>
-            initApp = function() {
+            loginInnit = function() {
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (!user) {
                         // User is signed out.
@@ -22,7 +22,7 @@
             };
 
             window.addEventListener('load', function() {
-                initApp()
+                loginInnit()
             });
         </script>
     </head>

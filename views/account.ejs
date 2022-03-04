@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <%- include('partials/head'); %>
+
+        <script>
+            loadAccountData = function() {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        // User is signed in.
+
+                        user.getIdToken().then(function(accessToken) {
+                            let p;
+                            const accInf = document.getElementById("accountInfo");
+
+                            // user display name
+                            p = document.createElement("p");
+                            p.innerText = "Username: " + user.displayName;
+                            accInf.appendChild(p);
+
+                            // user email
+                            p = document.createElement("p");
+                            p.innerText = "e-mail: " + user.email;
+                            accInf.appendChild(p);
+
+                            // user account creation date
+                            const date = new Date(user.metadata.creationTime);
+                            const dNow = new Date();
+                            let tDelta = dNow - date;
+
+                            if (tDelta < 1000 * 60 * 60 * 24) {
+                                tDelta = "today";
+                            }
+                            else {
+                                tDelta = `${Math.round((dNow - date)/1000/60/60/24)} days ago`;
+                            }
+
+                            console.log(date);
+
+                            p = document.createElement("p");
+                            p.innerText = `Account created: ${tDelta}`;
+                            accInf.appendChild(p);
+
+                            // load saved notes
+                            fetch("/api/savedNotes", {method: "POST",
+                                headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+                                body: JSON.stringify({userId: user.uid})}).then(res => res.json()).then(data => {
+
+                                    data.forEach(e => {
+                                        let a;
+                                        p = document.createElement("p");
+
+                                        a = document.createElement("a");
+                                        a.innerText = e.replace(/-/g, " ");
+                                        a.href = "/note/" + e;
+                                        a.classList.value = "hover:underline hover:font-bold text-md";
+
+                                        p.appendChild(a);
+                                        document.getElementById('savedNotes').appendChild(p);
+                                    });
+                            });
+                        });
+                    }
+                    else {
+                        // User is signed out.
+                        window.location='/';
+                    }
+                }, function(error) {
+                    console.log(error);
+                });
+            };
+
+            window.addEventListener('load', function() {
+                loadAccountData()
+            });
+        </script>
+    </head>
+    <body class="bg-slate-800 text-white
+                       w-10/12 md:w-1/2 mx-auto mt-12">
+
+        <div class="mb-24">
+            <div class="mb-12">
+                <%- include('partials/logo'); %>
+            </div>
+
+            <div class="flex flex-wrap justify-center">
+                <div class="basis-full mb-12
+                bg-blue-500 px-20 py-4 rounded-2xl" id="savedNotes">
+
+                    <h2 class="text-2xl">Saved notes</h2>
+                    <!-- TODO: add real saved notes -->
+
+                </div>
+
+                <div class="basis-full mb-12
+                bg-blue-500 px-20 py-4 rounded-2xl" id="accountInfo">
+
+                    <h2 class="text-2xl">Account Info</h2>
+                </div>
+
+                <!-- TODO: add delete account button -->
+                <button class="bg-red-700" disabled="disabled">Delete account</button>
+            </div>
+        </div>
+    </body>
+</html>

@@ -7,7 +7,7 @@
         <button onclick="window.location='/login';">Log in</button>
     </div>
     <div class="hidden inline-block self-center ml-auto place-self-end" id="infoLogged">
-        <h3 class="mt-0" id="userInfo"></h3>
+        <a href="/account"><h3 class="mt-0" id="userInfo"></h3></a>
         <button onclick="firebase.auth().signOut();" class="float-right">Sign out</button>
     </div>
 </div>

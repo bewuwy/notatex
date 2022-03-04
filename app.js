@@ -29,13 +29,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// // firebase admin setup
-// const admin = require('firebase-admin');
-// const serviceAccount = process.env.FIREBASE_PRIVATE;
-//
-// admin.initializeApp({
-//     credential: admin.credential.cert(JSON.parse(serviceAccount))
-// });
+// firebase admin setup
+const admin = require('firebase-admin');
+const serviceAccount = process.env.FIREBASE_PRIVATE;
+
+admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(serviceAccount))
+});
 
 
 // index
@@ -47,6 +47,12 @@ app.get("/", (req, res) => {
 // login
 app.get("/login", (req, res) => {
     res.render("login");
+});
+
+
+// account
+app.get("/account", (req, res) => {
+    res.render("account");
 });
 
 
@@ -70,6 +76,30 @@ app.get('/note/:title', (req, res) => {
           console.error(error);
           res.send(error.toString());
   });
+});
+
+// api/savedNotes (userId)
+app.post("/api/savedNotes", (req, res) => {
+    const userId = req.body.userId;
+    if (typeof userId == "undefined") {
+        res.status(400).send({"Error": "Missing user id in request body"})
+    }
+
+    <!-- TODO: add real saved notes -->
+
+    res.send(["PP-Finanse-Firm", "twoja stara", userId.toString()]);
+});
+
+// api/deleteAccount
+app.post("/api/deleteAccount", (req, res) => {
+    const userId = req.body.userId;
+    if (typeof userId == "undefined") {
+        res.status(400).send({"Error": "Missing user id in request body"})
+    }
+
+    admin.auth().verifyIdToken()
+
+    res.send({"Success": "Deleted account"});
 });
 
 // catch 404
