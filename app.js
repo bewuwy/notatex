@@ -29,23 +29,24 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// firebase setup
-const admin = require('firebase-admin');
-const serviceAccount = process.env.FIREBASE_PRIVATE;
-
-admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(serviceAccount))
-});
+// // firebase admin setup
+// const admin = require('firebase-admin');
+// const serviceAccount = process.env.FIREBASE_PRIVATE;
+//
+// admin.initializeApp({
+//     credential: admin.credential.cert(JSON.parse(serviceAccount))
+// });
 
 
 // index
-const indexRouter = require('./routes/index');
-app.use('/', indexRouter);
+app.get("/", (req, res) => {
+    res.render('index');
+});
 
 
 // login
 app.get("/login", (req, res) => {
-   res.render("login");
+    res.render("login");
 });
 
 
