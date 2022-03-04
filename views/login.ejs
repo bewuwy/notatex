@@ -2,6 +2,29 @@
 <html lang="pl">
     <head>
         <%- include('partials/head'); %>
+
+        <!--  logged in/out handler  -->
+        <script>
+            initApp = function() {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (!user) {
+                        // User is signed out.
+                        document.getElementById("loginFirebase").classList.remove('hidden');
+                        ui.start('#loginFirebase', uiConfig);
+                    }
+                    else {
+                        // User is signed in.
+                        window.location="/";
+                    }
+                }, function(error) {
+                    console.log(error);
+                });
+            };
+
+            window.addEventListener('load', function() {
+                initApp()
+            });
+        </script>
     </head>
     <body class="bg-slate-800 text-white
                    w-10/12 md:w-1/2 mx-auto mt-12">

@@ -69,15 +69,7 @@
             } else {
                 // User is signed out.
                 document.getElementById("infoLogged").classList.add("hidden");
-                try {
-                    document.getElementById("loginFirebase").classList.remove('hidden');
-                }
-                catch (e) {
-                    console.log(e);
-                }
                 document.getElementById("buttonLogin").classList.remove('hidden');
-
-                ui.start('#loginFirebase', uiConfig);
             }
         }, function(error) {
             console.log(error);
