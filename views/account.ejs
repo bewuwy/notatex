@@ -4,13 +4,14 @@
         <%- include('partials/head'); %>
 
         <script>
-            loadAccountData = function() {
+            function initiateLoad() {
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
                         // User is signed in.
                         user.getIdToken().then(function(accessToken) {
                             let p;
                             const accInf = document.getElementById("accountInfo");
+                            accInf.innerHTML = "";
 
                             // user display name
                             p = document.createElement("p");
@@ -45,6 +46,7 @@
                                 headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
                                 body: JSON.stringify({userId: user.uid})}).then(res => res.json()).then(data => {
 
+                                    document.getElementById('savedNotes').innerHTML = "";
                                     data.forEach(e => {
                                         let a;
                                         p = document.createElement("p");
@@ -68,7 +70,8 @@
                                             body: JSON.stringify({userToken: idToken })})
                                             .then(res => res.json()).then(data => {
                                             console.log(data);
-                                            location.reload();
+
+                                            window.location='/';
                                         });
                                     }
                                 }
@@ -82,15 +85,11 @@
                 }, function(error) {
                     console.log(error);
                 });
-            };
-
-            window.addEventListener('load', function() {
-                loadAccountData();
-            });
+            }
         </script>
     </head>
     <body class="bg-slate-800 text-white
-                       w-10/12 md:w-1/2 mx-auto mt-12">
+                 w-10/12 md:w-1/2 mx-auto mt-12" onload="initiateLoad()">
 
         <div class="mb-24">
             <div class="mb-12">
@@ -99,17 +98,20 @@
 
             <div class="flex flex-wrap justify-center">
                 <div class="basis-full mb-12
-                bg-blue-500 px-20 py-4 rounded-2xl" id="savedNotes">
+                bg-blue-500 px-20 py-4 rounded-2xl">
 
                     <h2 class="text-2xl">Saved notes</h2>
                     <!-- TODO: add real saved notes -->
 
+                    <div id="savedNotes"></div>
                 </div>
 
                 <div class="basis-full mb-12
-                bg-blue-500 px-20 py-4 rounded-2xl" id="accountInfo">
+                bg-blue-500 px-20 py-4 rounded-2xl">
 
                     <h2 class="text-2xl">Account Info</h2>
+
+                    <div id="accountInfo"></div>
                 </div>
 
                 <button class="bg-red-500" id="deleteAccount">Delete account</button>
