@@ -86,20 +86,25 @@ app.post("/api/savedNotes", (req, res) => {
     }
 
     <!-- TODO: add real saved notes -->
-
     res.send(["PP-Finanse-Firm", "twoja stara", userId.toString()]);
 });
 
 // api/deleteAccount
 app.post("/api/deleteAccount", (req, res) => {
-    const userId = req.body.userId;
-    if (typeof userId == "undefined") {
-        res.status(400).send({"Error": "Missing user id in request body"})
+    const userToken = req.body.userToken;
+    if (typeof userToken == "undefined") {
+        return res.status(400).send({"Error": "Missing user token in request body"});
     }
 
-    admin.auth().verifyIdToken()
-
-    res.send({"Success": "Deleted account"});
+    admin.auth().verifyIdToken(userToken).then(r => {
+        admin.auth().deleteUser(r['uid']).then(r => {
+            return res.send({"Success": "Deleted account"});
+        }).catch((e) => {
+            return res.send({"Error": e, "Response": r});
+        });
+    }).catch((e) => {
+        return res.send({"Error": "Wrong user token"});
+    });
 });
 
 // catch 404
