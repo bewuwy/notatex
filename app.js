@@ -31,10 +31,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // firebase admin setup
 const admin = require('firebase-admin');
+const { getDatabase } = require('firebase-admin/database');
 const serviceAccount = process.env.FIREBASE_PRIVATE;
 
 admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(serviceAccount))
+    credential: admin.credential.cert(JSON.parse(serviceAccount)),
+    databaseURL: process.env.FIREBASE_DB
 });
 
 
@@ -78,15 +80,63 @@ app.get('/note/:title', (req, res) => {
   });
 });
 
+// api/saveNote (user token, note id)
+app.post("/api/saveNote", (req, res) => {
+   const userToken = req.body.userToken;
+   const noteId = req.body.note;
+
+    if (typeof userToken == "undefined" || typeof noteId == "undefined") {
+        return res.status(400).send({"Error": "Missing user token and note id in request body"});
+    }
+
+    admin.auth().verifyIdToken(userToken).then(user => {
+        const db = getDatabase();
+        const usersRef = db.ref('users');
+        const userRef = usersRef.child(user.uid);
+        const savedRef = userRef.child("savedNotes");
+
+        savedRef.push().set(noteId).then(r => {
+            return res.send({"success": "Saved note"});
+        });
+    }).catch((e) => {
+        return res.status(400).send({"Error": "Wrong user token"});
+    });
+});
+
+// api/deleteSavedNote (user token, note id)
+app.post("/api/deleteSavedNote", (req, res) => {
+   // TODO: add delete saved note
+});
+
 // api/savedNotes (userId)
 app.post("/api/savedNotes", (req, res) => {
     const userId = req.body.userId;
     if (typeof userId == "undefined") {
-        res.status(400).send({"Error": "Missing user id in request body"})
+        return res.status(400).send({"Error": "Missing user id in request body"});
     }
 
-    <!-- TODO: add real saved notes -->
-    res.send(["PP-Finanse-Firm", "twoja stara", userId.toString()]);
+    const db = getDatabase();
+    const usersRef = db.ref('users');
+    const userRef = usersRef.child(userId);
+    const savedRef = userRef.child("savedNotes");
+
+    savedRef.once('value', (data) => {
+        let savedData = data.val();
+
+        if (savedData) {
+            const savedValues = Object.keys(savedData).map(function (key) {
+                return savedData[key];
+            });
+
+            return res.send(savedValues);
+        }
+        else {
+            return res.send([null]);
+        }
+
+    }).catch((e) => {
+        return res.status(400).send({"Error": e});
+    });
 });
 
 // api/deleteAccount
