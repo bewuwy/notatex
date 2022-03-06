@@ -75,8 +75,13 @@ app.get('/note/:title', (req, res) => {
           res.render("note", { title: title, content: note });
       })
       .catch(error => {
-          console.error(error);
-          res.send(error.toString());
+          if (error.response.status === 404) {
+              res.status(404).send('Bruh... 404...<br>' + req.url + " not found");
+          }
+          else {
+              console.error(error);
+              res.send(error.toString());
+          }
   });
 });
 
@@ -139,7 +144,7 @@ app.post("/api/savedNotes", (req, res) => {
     });
 });
 
-// api/deleteAccount
+// api/deleteAccount (userToken)
 app.post("/api/deleteAccount", (req, res) => {
     const userToken = req.body.userToken;
     if (typeof userToken == "undefined") {
@@ -147,13 +152,21 @@ app.post("/api/deleteAccount", (req, res) => {
     }
 
     admin.auth().verifyIdToken(userToken).then(r => {
-        admin.auth().deleteUser(r['uid']).then(r => {
-            return res.send({"Success": "Deleted account"});
-        }).catch((e) => {
-            return res.send({"Error": e, "Response": r});
+        const db = getDatabase();
+        const usersRef = db.ref('users');
+        const userRef = usersRef.child(r['uid']);
+
+        userRef.remove().then(function () {
+            admin.auth().deleteUser(r['uid']).then(r => {
+                return res.status(400).send({"Success": "Deleted account"});
+            }).catch((e) => {
+                return res.status(400).send({"Error": e, "Response": r});
+            });
+        }).catch(e => {
+            return res.status(400).send({"Error": e, "Response": r});
         });
     }).catch((e) => {
-        return res.send({"Error": "Wrong user token"});
+        return res.status(400).send({"Error": "Wrong user token"});
     });
 });
 
