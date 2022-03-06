@@ -114,6 +114,7 @@ app.post("/api/deleteSavedNote", (req, res) => {
 });
 
 // api/savedNotes (userId)
+// TODO: add firebase db rules
 app.post("/api/savedNotes", (req, res) => {
     const userId = req.body.userId;
     if (typeof userId == "undefined") {
