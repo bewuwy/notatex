@@ -100,7 +100,7 @@ app.post("/api/saveNote", (req, res) => {
         const userRef = usersRef.child(user.uid);
         const savedRef = userRef.child("savedNotes");
 
-        savedRef.push().set(noteId).then(r => {
+        savedRef.push(noteId).then(r => {
             return res.send({"success": "Saved note"});
         });
     }).catch((e) => {
@@ -110,11 +110,33 @@ app.post("/api/saveNote", (req, res) => {
 
 // api/deleteSavedNote (user token, note id)
 app.post("/api/deleteSavedNote", (req, res) => {
-   // TODO: add delete saved note
+    const userToken = req.body.userToken;
+    const noteId = req.body.note;
+
+    if (typeof userToken == "undefined" || typeof noteId == "undefined") {
+        return res.status(400).send({"Error": "Missing user token and note id in request body"});
+    }
+
+    admin.auth().verifyIdToken(userToken).then(user => {
+        const db = getDatabase();
+        const usersRef = db.ref('users');
+        const userRef = usersRef.child(user.uid);
+        const savedRef = userRef.child("savedNotes");
+        let noteRef;
+
+        savedRef.orderByValue().equalTo(noteId).once('value', snapshot => {
+            noteRef = Object.keys(snapshot.toJSON())[0];
+        }).then(r => {
+            savedRef.child(noteRef).remove().then(r => {
+                return res.send({"success": "Unsaved note"});
+            });
+        });
+    }).catch((e) => {
+        return res.status(400).send({"Error": "Wrong user token"});
+    });
 });
 
 // api/savedNotes (userId)
-// TODO: add firebase db rules
 app.post("/api/savedNotes", (req, res) => {
     const userId = req.body.userId;
     if (typeof userId == "undefined") {
