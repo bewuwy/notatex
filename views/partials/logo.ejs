@@ -1,4 +1,28 @@
-<div class="inline-block" onclick="window.location='/';">
-    <h1 class="mb-0 inline-block">nota<span class="text-blue-400">tex</span></h1><br>
-    <span>twoja stara</span>
+<div class="flex">
+    <div class="inline-block" onclick="window.location='/';">
+        <h1 class="mb-0 inline-block">nota<span class="text-blue-400">tex</span></h1><br>
+        <span>twoja stara</span>
+    </div>
+    <div class="hidden flex self-center ml-auto place-self-end" id="buttonLogin">
+        <button onclick="window.location='/login';">
+            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            </svg>
+            Log in
+        </button>
+    </div>
+    <div class="hidden inline-block self-center ml-auto place-self-end flex flex-wrap place-content-end" id="infoLogged">
+        <a href="/account" class="basis-full flex place-content-end">
+            <span class="mt-0" id="userInfo"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="self-center h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+        </a>
+        <button onclick="firebase.auth().signOut();" class="mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Sign out
+        </button>
+    </div>
 </div>

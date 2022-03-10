@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <%- include('partials/head'); %>
+
+        <!--  logged in/out handler  -->
+        <script>
+            loginInnit = function() {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (!user) {
+                        // User is signed out.
+                        document.getElementById("loginFirebase").classList.remove('hidden');
+                        ui.start('#loginFirebase', uiConfig);
+                    }
+                    else {
+                        // User is signed in.
+                        window.location="/";
+                    }
+                }, function(error) {
+                    console.log(error);
+                });
+            };
+
+            window.addEventListener('load', function() {
+                loginInnit()
+            });
+        </script>
+    </head>
+    <body>
+        <div id="content">
+
+            <div class="mb-12">
+                <%- include('partials/logo'); %>
+            </div>
+
+            <div class="hidden" id="loginFirebase"></div>
+        </div>
+    </body>
+</html>
