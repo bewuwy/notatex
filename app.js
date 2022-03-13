@@ -1,5 +1,9 @@
 //imports
 
+// TODO: organize js code from pages
+// TODO: index page
+// TODO: api to add own notes
+
 const express = require('express');
 const path = require('path');
 

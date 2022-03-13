@@ -24,12 +24,16 @@ button {
 #note ul {
     @apply list-disc;
 }
+#note li {
+    @apply ml-4;
+}
 
 #note h1, h2, h3, h4, h5, h6 {
     @apply font-bold my-3;
 }
 #note h1 {
-    @apply text-3xl text-red-500;
+    @apply text-3xl text-red-500
+    mt-6 pb-2 border-b-4 border-slate-700;
 }
 #note h2 {
     @apply text-2xl text-orange-500;
