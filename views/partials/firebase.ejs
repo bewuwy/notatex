@@ -40,7 +40,8 @@
                 const displayName = user.displayName;
                 user.getIdToken().then(function(accessToken) {
                     console.log(user);
-                    document.getElementById("userInfo").textContent = `Logged in as ${displayName}`;
+
+                    document.getElementById("userInfo").textContent = `${displayName}`;
 
                     document.getElementById("infoLogged").classList.remove("hidden");
                     document.getElementById("buttonLogin").classList.add('hidden');

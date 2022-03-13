@@ -16,11 +16,13 @@
                             // user display name
                             p = document.createElement("p");
                             p.innerText = "Username: " + user.displayName;
+                            p.title = user.displayName;
                             accInf.appendChild(p);
 
                             // user email
                             p = document.createElement("p");
                             p.innerText = "e-mail: " + user.email;
+                            p.title = user.email;
                             accInf.appendChild(p);
 
                             // user account creation date
@@ -35,10 +37,9 @@
                                 tDelta = `${Math.round((dNow - date)/1000/60/60/24)} days ago`;
                             }
 
-                            console.log(date);
-
                             p = document.createElement("p");
                             p.innerText = `Account created: ${tDelta}`;
+                            p.title = user.metadata.creationTime;
                             accInf.appendChild(p);
 
                             // load saved notes
@@ -107,8 +108,7 @@
             </div>
 
             <div class="flex flex-wrap justify-center">
-                <div class="basis-full mb-12
-                bg-blue-500 px-20 py-4 rounded-2xl">
+                <div class="infoElement">
 
                     <h2 class="text-2xl">
                         <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -121,8 +121,7 @@
                     </div>
                 </div>
 
-                <div class="basis-full mb-12
-                bg-blue-500 px-20 py-4 rounded-2xl">
+                <div class="infoElement">
 
                     <h2 class="text-2xl">
                         <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

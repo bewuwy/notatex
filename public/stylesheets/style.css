@@ -21,6 +21,16 @@ button {
     @apply px-4 py-2 rounded-2xl bg-blue-400 hover:brightness-75 transition-all duration-200;
 }
 
+/* account css */
+.infoElement {
+    @apply basis-full mb-12
+    bg-blue-500 px-6 md:px-20 py-4 rounded-2xl;
+}
+.infoElement p, .infoElement {
+    @apply overflow-hidden truncate;
+}
+
+/* note css */
 #note ul {
     @apply list-disc;
 }
