@@ -61,6 +61,12 @@ app.get("/account", (req, res) => {
 });
 
 
+// settings
+app.get("/settings", (req, res) => {
+   res.render("settings");
+});
+
+
 // notes
 app.get('/note/:title', (req, res) => {
   // get note from github repo

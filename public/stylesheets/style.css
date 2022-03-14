@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    @apply bg-slate-800 text-white w-full min-h-screen;
+    @apply w-full min-h-screen;
 }
 #content {
     @apply w-10/12 md:w-1/2 mx-auto pt-12 pb-24;
@@ -18,55 +18,130 @@ p {
 }
 
 button {
-    @apply px-4 py-2 rounded-2xl bg-blue-400 hover:brightness-75 transition-all duration-200;
+    @apply px-4 py-2 rounded-2xl hover:brightness-75 transition-all duration-200;
 }
+
+/* themes */
+    /* default theme */
+        body {
+            @apply bg-slate-800 text-white;
+        }
+
+        button {
+            @apply bg-blue-400;
+        }
+
+        .infoElement {
+            @apply bg-blue-500;
+        }
+
+        label {
+            @apply bg-blue-600;
+        }
+
+    /* minimalist theme */
+        .theme-minimalist {
+            @apply bg-minimalist-gray text-minimalist-text;
+        }
+
+        .theme-minimalist button {
+            @apply bg-blue-600;
+        }
+
+        .theme-minimalist .infoElement {
+            @apply bg-blue-600;
+        }
+
+        .theme-minimalist label {
+            @apply bg-blue-700;
+        }
+
+        /* note */
+        .theme-minimalist #note > *:is(h1, h2, h3, h4, h5, h6) {
+            @apply text-minimalist-text;
+        }
+
+        .theme-minimalist h1 {
+            @apply text-2xl;
+            font-variant: small-caps;
+        }
+
+        .theme-minimalist #note h1 {
+            @apply text-2xl;
+        }
+        .theme-minimalist #note h2 {
+            @apply text-xl;
+        }
+        .theme-minimalist #note h3 {
+            @apply text-lg;
+        }
+        .theme-minimalist #note > *:is(h4, h5, h6) {
+            font-variant: small-caps;
+        }
+        .theme-minimalist #note h4 {
+            @apply text-base;
+        }
+        .theme-minimalist #note h5 {
+            @apply text-sm;
+        }
+        .theme-minimalist #note h6 {
+            @apply text-xs;
+        }
 
 /* account css */
-.infoElement {
-    @apply basis-full mb-12
-    bg-blue-500 px-6 md:px-20 py-4 rounded-2xl;
-}
-.infoElement p, .infoElement {
-    @apply overflow-hidden truncate;
-}
+    .infoElement {
+        @apply basis-full mb-12
+        px-6 md:px-20 py-4 rounded-2xl;
+    }
+    .infoElement p, .infoElement {
+        @apply overflow-hidden truncate;
+    }
+
+/* settings css */
+    #themeSettings label {
+        @apply px-4 py-2;
+    }
+    #themeSettings input {
+        @apply hidden;
+    }
 
 /* note css */
-#note ul {
-    @apply list-disc;
-}
-#note li {
-    @apply ml-4;
-}
+    #note ul {
+        @apply list-disc;
+    }
+    #note li {
+        @apply ml-4;
+    }
 
-#note h1, h2, h3, h4, h5, h6 {
-    @apply font-bold my-3;
-}
-#note h1 {
-    @apply text-3xl text-red-500
-    mt-6 pb-2 border-b-4 border-slate-700;
-}
-#note h2 {
-    @apply text-2xl text-orange-500;
-}
-#note h3 {
-    @apply text-xl text-yellow-500;
-}
-#note h4 {
-    @apply text-lg text-lime-600;
-}
-#note h5 {
-    @apply text-base text-emerald-500;
-}
-#note h6 {
-    @apply text-base text-sky-500;
-}
+    #note h1, h2, h3, h4, h5, h6 {
+        @apply font-bold my-3;
+    }
+    #note h1 {
+        @apply text-3xl text-red-500
+        mt-6 pb-2 border-b-4 border-slate-700;
+    }
+    #note h2 {
+        @apply text-2xl text-orange-500;
+    }
+    #note h3 {
+        @apply text-xl text-yellow-500;
+    }
+    #note h4 {
+        @apply text-lg text-lime-600;
+    }
+    #note h5 {
+        @apply text-base text-emerald-500;
+    }
+    #note h6 {
+        @apply text-base text-sky-500;
+    }
 
-#note table {
-    @apply table-auto border border-black;
-}
-#note th {
-    @apply border-2 border-zinc-900 px-2 py-1;
-}
-#note td {
-    @apply border-2 border-zinc-900 px-2 py-1;
-}
+    #note table {
+        @apply table-auto border border-black;
+    }
+    #note th {
+        @apply border-2 border-zinc-900 px-2 py-1;
+    }
+    #note td {
+        @apply border-2 border-zinc-900 px-2 py-1;
+    }
