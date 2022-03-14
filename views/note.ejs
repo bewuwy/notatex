@@ -2,6 +2,7 @@
 <html lang="pl">
     <head>
         <%- include('partials/head', { title: title }); %>
+        <script src="/javascripts/userData.js"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -10,45 +11,39 @@
 
                 const noteId = window.location.toString().split("note/")[1];
 
-                function saveNote() {
-                    // save note by id and user token
+                function saveNoteClick() {
+                    // save note by id and current user's token
                     firebase.auth().currentUser.getIdToken().then(function(idToken) {
                         saveNoteText.innerText = "Loading...";
                         saveNoteA.onclick = null;
 
-                        fetch("/api/saveNote", {method: "POST",
-                            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                            body: JSON.stringify({userToken: idToken, note: noteId})})
-                            .then(res => res.json()).then(data => {
+                        saveNote(noteId, idToken).then(res => res.json()).then(data => {
                             if (data.success) {
                                 console.log(data);
 
                                 saveNoteText.innerText = "Note saved";
                                 saveNoteA.classList.value = "text-gray-500";
 
-                                saveNoteA.onclick = unsaveNote;
+                                saveNoteA.onclick = unsaveNoteClick;
                             }
                         });
                     });
                 }
 
-                function unsaveNote() {
-                    // remove note by id and user token
+                function unsaveNoteClick() {
+                    // remove note by id and current user's token
                     firebase.auth().currentUser.getIdToken().then(function(idToken) {
                         saveNoteText.innerText = "Loading...";
                         saveNoteA.onclick = null;
 
-                        fetch("/api/deleteSavedNote", {method: "POST",
-                            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                            body: JSON.stringify({userToken: idToken, note: noteId})})
-                            .then(res => res.json()).then(data => {
+                        unsaveNote(noteId, idToken).then(res => res.json()).then(data => {
                             if (data.success) {
                                 console.log(data);
 
                                 saveNoteText.innerText = "Save note";
                                 saveNoteA.classList.value = "group hover:underline hover:font-bold";
 
-                                saveNoteA.onclick = saveNote;
+                                saveNoteA.onclick = saveNoteClick;
                             }
                         });
                     });
@@ -59,22 +54,20 @@
                        // signed in
 
                        // check if note already saved
-                       fetch("/api/savedNotes", {method: "POST",
-                           headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                           body: JSON.stringify({userId: user.uid})}).then(res => res.json()).then(data => {
-
+                       getSavedNotes(user.uid).then(res => res.json()).then(data => {
+                           // TODO: something better to check if saved than downloading whole list of savedNotes?
                            if (data.includes(noteId)) {
                                // note saved
-                               
+
                                saveNoteText.innerText = "Note saved";
                                saveNoteA.classList.value = "text-gray-500";
 
-                               saveNoteA.onclick = unsaveNote;
+                               saveNoteA.onclick = unsaveNoteClick;
                            }
                            else {
                                // note not saved
 
-                               saveNoteA.onclick = saveNote;
+                               saveNoteA.onclick = saveNoteClick;
                            }
                        });
                    }
@@ -88,10 +81,14 @@
         </script>
     </head>
     <body>
+        <!-- TODO: more themes -->
+        <!-- TODO: table of contents -->
+        <!-- TODO: share button -->
+
         <div id="content" class="pb-16 md:pb-24">
 
             <div>
-                <%- include('partials/logo'); %>
+                <%- include('partials/topBar'); %>
             </div>
 
             <div class="my-7 md:my-10">

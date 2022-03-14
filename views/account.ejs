@@ -2,91 +2,75 @@
 <html lang="pl">
     <head>
         <%- include('partials/head'); %>
+        <script src="/javascripts/userData.js"></script>
+        <script src="/javascripts/utils.js"></script>
 
         <script>
             function initiateLoad() {
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
                         // User is signed in.
-                        user.getIdToken().then(function(accessToken) {
-                            let p;
-                            const accInf = document.getElementById("accountInfo");
+                        const savedNotesDiv = document.getElementById("savedNotes");
+                        const accInf = document.getElementById("accountInfo");
+
+                        // load account info
                             accInf.innerHTML = "";
 
                             // user display name
-                            p = document.createElement("p");
-                            p.innerText = "Username: " + user.displayName;
-                            p.title = user.displayName;
-                            accInf.appendChild(p);
+                                accInf.appendChild(createParagraph("Username: " + user.displayName, user.displayName));
 
                             // user email
-                            p = document.createElement("p");
-                            p.innerText = "e-mail: " + user.email;
-                            p.title = user.email;
-                            accInf.appendChild(p);
+                                accInf.appendChild(createParagraph("e-mail: " + user.email, user.email));
 
                             // user account creation date
-                            const date = new Date(user.metadata.creationTime);
-                            const dNow = new Date();
-                            let tDelta = dNow - date;
+                                const date = new Date(user.metadata.creationTime);
+                                const dNow = new Date();
+                                let tDelta = dNow - date;
 
-                            if (tDelta < 1000 * 60 * 60 * 24) {
-                                tDelta = "today";
-                            }
-                            else {
-                                tDelta = `${Math.round((dNow - date)/1000/60/60/24)} days ago`;
-                            }
+                                if (tDelta < 1000 * 60 * 60 * 24) {
+                                    tDelta = "today";
+                                }
+                                else {
+                                    tDelta = `${Math.round((dNow - date)/1000/60/60/24)} days ago`;
+                                }
 
-                            p = document.createElement("p");
-                            p.innerText = `Account created: ${tDelta}`;
-                            p.title = user.metadata.creationTime;
-                            accInf.appendChild(p);
+                                accInf.appendChild(createParagraph(`Account created: ${tDelta}`, user.metadata.creationTime));
 
-                            // load saved notes
-                            fetch("/api/savedNotes", {method: "POST",
-                                headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                                body: JSON.stringify({userId: user.uid})}).then(res => res.json()).then(data => {
+                        // load saved notes
+                            getSavedNotes(user.uid).then(res => res.json()).then(data => {
+                                savedNotesDiv.innerHTML = "";
 
-                                    document.getElementById('savedNotes').innerHTML = "";
+                                if (data[0]) {
+                                    data.forEach(e => {
+                                        let a = document.createElement("a");
+                                        let p = document.createElement("p");
 
-                                    if (data[0]) {
-                                        data.forEach(e => {
-                                            let a;
-                                            p = document.createElement("p");
+                                        a.innerText = e.replace(/-/g, " ");
+                                        a.href = "/note/" + e;
+                                        a.classList.value = "hover:underline hover:font-bold text-md";
 
-                                            a = document.createElement("a");
-                                            a.innerText = e.replace(/-/g, " ");
-                                            a.href = "/note/" + e;
-                                            a.classList.value = "hover:underline hover:font-bold text-md";
-
-                                            p.appendChild(a);
-                                            document.getElementById('savedNotes').appendChild(p);
-                                        });
-                                    }
-                                    else {
-                                        p = document.createElement("p");
-                                        p.innerText = "No saved notes D:";
-                                        document.getElementById("savedNotes").appendChild(p);
-                                    }
+                                        p.appendChild(a);
+                                        savedNotesDiv.appendChild(p);
+                                    });
+                                }
+                                else {
+                                    savedNotesDiv.appendChild(createParagraph("No saved notes D:"));
+                                }
                             });
 
-                            // delete account button
-                            firebase.auth().currentUser.getIdToken().then(function(idToken) {
-                                document.getElementById("deleteAccount").onclick = function () {
+                        // delete account button
+                            document.getElementById("deleteAccount").onclick = function () {
+                                firebase.auth().currentUser.getIdToken().then(function(idToken) {
                                     if (confirm("Are you sure you want to delete your account?") === true) {
-                                        fetch("/api/deleteAccount", {method: "POST",
-                                            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                                            body: JSON.stringify({userToken: idToken })})
-                                            .then(res => res.json()).then(data => {
+                                        deleteAccount(idToken).then(res => res.json()).then(data => {
                                                 console.log(data);
 
                                                 alert("Your account has been deleted");
                                                 window.location='/';
                                         });
                                     }
-                                }
-                            });
-                        });
+                                });
+                            };
                     }
                     else {
                         // User is signed out.
@@ -99,12 +83,10 @@
         </script>
     </head>
     <body onload="initiateLoad()">
-        <!-- TODO: better mobile CSS -->
-
         <div id="content">
 
             <div class="mb-12">
-                <%- include('partials/logo'); %>
+                <%- include('partials/topBar'); %>
             </div>
 
             <div class="flex flex-wrap justify-center">

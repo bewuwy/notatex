@@ -1,6 +1,5 @@
 //imports
 
-// TODO: organize js code from pages
 // TODO: index page
 // TODO: api to add own notes
 

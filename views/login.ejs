@@ -14,23 +14,21 @@
                     }
                     else {
                         // User is signed in.
-                        window.location="/";
+                        window.location="/account";
                     }
                 }, function(error) {
                     console.log(error);
                 });
             };
 
-            window.addEventListener('load', function() {
-                loginInnit()
-            });
+            window.addEventListener('load', loginInnit);
         </script>
     </head>
     <body>
         <div id="content">
 
             <div class="mb-12">
-                <%- include('partials/logo'); %>
+                <%- include('partials/topBar'); %>
             </div>
 
             <div class="hidden" id="loginFirebase"></div>
