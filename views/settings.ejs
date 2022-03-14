@@ -4,6 +4,8 @@
         <%- include('partials/head'); %>
 
         <script>
+            // TODO: settings saved in account and not in cookies
+
             function initiateSettings() {
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
@@ -57,12 +59,12 @@
                         <div id="themeSettings" class="flex mb-4">
                             <div>
                                 <input type="radio" name="theme" value="default" id="default" class="peer">
-                                <label for="default" class="peer-checked:brightness-75">Default theme</label>
+                                <label for="default" class="peer-checked:brightness-75 radio-label">Default theme</label>
                             </div>
 
                             <div>
                                 <input type="radio" name="theme" value="minimalist" id="minimalist-dark" class="peer">
-                                <label for="minimalist-dark" class="peer-checked:brightness-75">Minimalist dark</label>
+                                <label for="minimalist-dark" class="peer-checked:brightness-75 radio-label">Minimalist dark</label>
                             </div>
                         </div>
                     </div>

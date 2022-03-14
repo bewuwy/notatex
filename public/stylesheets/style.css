@@ -35,7 +35,7 @@ button {
             @apply bg-blue-500;
         }
 
-        label {
+        .radio-label {
             @apply bg-blue-600;
         }
 
@@ -52,8 +52,12 @@ button {
             @apply bg-blue-600;
         }
 
-        .theme-minimalist label {
+        .theme-minimalist .radio-label {
             @apply bg-blue-700;
+        }
+
+        .theme-minimalist #savePreferences {
+            @apply bg-green-600;
         }
 
         /* note */
@@ -66,9 +70,6 @@ button {
             font-variant: small-caps;
         }
 
-        .theme-minimalist #note h1 {
-            @apply text-2xl;
-        }
         .theme-minimalist #note h2 {
             @apply text-xl;
         }
@@ -98,11 +99,15 @@ button {
     }
 
 /* settings css */
-    #themeSettings label {
+    #themeSettings .radio-label {
         @apply px-4 py-2;
     }
     #themeSettings input {
         @apply hidden;
+    }
+
+    #savePreferences {
+        @apply bg-green-500;
     }
 
 /* note css */
