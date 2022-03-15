@@ -14,20 +14,20 @@
                         applySettingsButton.onclick = function () {
                             let themeValue = document.querySelector('input[name="theme"]:checked').value;
 
+                            // save settings and go back to last page
                             setCookie("theme", themeValue, 9999);
 
-                            location.reload();
+                            window.location = getLastPage();
                         };
 
-                        if (getCookie("theme")) {
-                            const selectedTheme = document.querySelector(`input[value=${getCookie("theme")}]`);
-
-                            selectedTheme.checked = true;
-                        }
+                        // load saved settings on load
+                        let savedTheme = getCookie("theme") || "default";
+                        const selectedTheme = document.querySelector(`input[value=${savedTheme}]`);
+                        selectedTheme.checked = true;
                     }
                     else {
                         // User is signed out.
-                        window.location='/';
+                        window.location='/login';
                     }
                 }, function(error) {
                     console.log(error);

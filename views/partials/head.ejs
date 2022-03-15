@@ -5,18 +5,5 @@
 <link rel='stylesheet' href='/stylesheets/style.css' />
 <link rel='stylesheet' href='/stylesheets/tcss.css' />
 
-<%- include('firebase'); %>
 <script src="/javascripts/utils.js"></script>
-
-<!-- theme settings -->
-<script>
-    window.addEventListener("load", function () {
-        console.log(getCookie("theme"));
-
-        switch (getCookie("theme")) {
-            case "minimalist":
-                document.body.classList.add("theme-minimalist");
-                break;
-        }
-    });
-</script>
+<%- include('firebase'); %>

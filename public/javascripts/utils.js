@@ -9,6 +9,18 @@ function createParagraph(text, tooltip="") {
     return p
 }
 
+function getLastPage() {
+    let back;
+    if (document.referrer.indexOf(location.protocol + "//" + location.host) === 0) {
+        back = document.referrer || "/";
+    }
+    else {
+        back = "/";
+    }
+
+    return back;
+}
+
 function setCookie(name,value,days) {
     let expires = "";
     if (days) {

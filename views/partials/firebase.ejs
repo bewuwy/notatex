@@ -7,7 +7,7 @@
 <script type="text/javascript">
     // FirebaseUI config.
     const uiConfig = {
-        signInSuccessUrl: '/account',
+        signInSuccessUrl: getLastPage(),
         signInOptions: [
             // Leave the lines as is for the providers you want to offer your users.
             firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -37,15 +37,20 @@
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 // User is signed in.
-                const displayName = user.displayName;
-                user.getIdToken().then(function(accessToken) {
-                    console.log(user);
+                console.log(user);
 
-                    document.getElementById("userInfo").textContent = `${displayName}`;
+                // set user info in topbar
+                document.getElementById("userInfo").textContent = `${user.displayName}`;
 
-                    document.getElementById("infoLogged").classList.remove("hidden");
-                    document.getElementById("buttonLogin").classList.add('hidden');
-                });
+                document.getElementById("infoLogged").classList.remove("hidden");
+                document.getElementById("buttonLogin").classList.add('hidden');
+
+                // set theme
+                switch (getCookie("theme")) {
+                    case "minimalist":
+                        document.body.classList.add("theme-minimalist");
+                        break;
+                }
             } else {
                 // User is signed out.
                 document.getElementById("infoLogged").classList.add("hidden");
