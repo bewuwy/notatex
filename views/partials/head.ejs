@@ -7,3 +7,14 @@
 
 <script src="/javascripts/utils.js"></script>
 <%- include('firebase'); %>
+
+<script>
+    window.addEventListener("load", function () {
+        // set theme
+        switch (getCookie("theme")) {
+            case "minimalist":
+                document.body.classList.add("theme-minimalist");
+                break;
+        }
+    });
+</script>

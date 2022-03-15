@@ -45,16 +45,13 @@
                 document.getElementById("infoLogged").classList.remove("hidden");
                 document.getElementById("buttonLogin").classList.add('hidden');
 
-                // set theme
-                switch (getCookie("theme")) {
-                    case "minimalist":
-                        document.body.classList.add("theme-minimalist");
-                        break;
-                }
             } else {
                 // User is signed out.
                 document.getElementById("infoLogged").classList.add("hidden");
                 document.getElementById("buttonLogin").classList.remove('hidden');
+
+                document.body.classList.value = "";
+                eraseCookie("theme");
             }
         }, function(error) {
             console.log(error);
