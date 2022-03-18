@@ -18,8 +18,8 @@
     <!-- account info -->
     <div class="hidden inline-block self-center ml-auto place-self-end flex flex-wrap place-content-end overflow-hidden pl-4" id="infoLogged">
         <!-- profile icon -->
-        <a href="/account" class="flex overflow-hidden text-base py-1">
-            <nobr><span class="hidden lg:block lg:pr-1.5">Logged in as </span></nobr><span class="mt-0 truncate overflow-hidden" id="userInfo"></span>
+        <a href="/account" class="flex overflow-hidden text-base items-center py-1">
+            <span class="hidden lg:block lg:pr-1.5">Logged in as </span><span class="mt-0 truncate overflow-hidden" id="userInfo"></span>
             <svg xmlns="http://www.w3.org/2000/svg" class="self-center h-6 w-6 min-w-[1.5rem] ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
@@ -34,11 +34,13 @@
         </a>
 
         <!-- sign out button -->
-        <button onclick="firebase.auth().signOut();" class="basis-full ml-auto mt-2 max-w-max">
-            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Sign out
-        </button>
+        <div class="basis-full ml-auto mt-2 flex place-items-end">
+            <button onclick="firebase.auth().signOut();" class="ml-auto max-w-max">
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Sign out
+            </button>
+        </div>
     </div>
 </div>

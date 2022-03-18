@@ -2,6 +2,7 @@
 
 // TODO: index page
 // TODO: api to add own notes
+// TODO: optimize API code
 
 const express = require('express');
 const path = require('path');
