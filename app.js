@@ -77,7 +77,13 @@ app.get("/account", (req, res) => {
 
 // settings
 app.get("/settings", (req, res) => {
-   res.render("settings");
+    console.log(req.cookies.theme);
+
+    const themes_sources = {
+        "minimalist": "kepano/obsidian-minimal"
+    }
+
+   res.render("settings", {"theme_source": themes_sources[req.cookies.theme]});
 });
 
 

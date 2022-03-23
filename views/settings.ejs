@@ -67,6 +67,10 @@
                                 <label for="minimalist-dark" class="peer-checked:brightness-75 radio-label">Minimalist dark</label>
                             </div>
                         </div>
+
+                        <% if (theme_source) { %>
+                            <div id="theme-source">Theme inspired from <a class="underline" target="_blank" href="https://github.com/<%- theme_source -%>"><%- theme_source -%></a> github repository</div>
+                        <% } %>
                     </div>
                 </div>
 
