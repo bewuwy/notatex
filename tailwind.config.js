@@ -7,8 +7,14 @@ module.exports = {
       colors: {
         'minimalist-gray': "#262626",
         'minimalist-text': "#D1D1D1",
+
+        'button-color': 'var(--button-color)',
+        'green-button-color': 'var(--green-button-color)',
+        'radio-label-color': 'var(--radio-label-color)',
       },
     },
   },
-  plugins: [],
+  plugins: [
+      require('@tailwindcss/line-clamp'),
+  ],
 }

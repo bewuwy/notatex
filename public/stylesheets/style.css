@@ -12,52 +12,43 @@ body {
 h1 {
     @apply text-4xl mb-4 font-bold;
 }
+h3 {
+    @apply text-2xl;
+}
 
 p {
     @apply my-2;
 }
 
 button {
-    @apply px-4 py-2 rounded-2xl hover:brightness-75 transition-all duration-200;
+    @apply px-4 py-2 rounded-2xl hover:brightness-75 transition-all duration-200 bg-button-color;
 }
 
 /* themes */
     /* default theme */
         body {
             @apply bg-slate-800 text-white;
-        }
 
-        button {
-            @apply bg-blue-400;
+            --button-color: rgb(96 165 250);
+            --green-button-color: rgb(34 197 94);
+            --radio-label-color: rgb(37 99 235);
         }
 
         .infoElement {
-            @apply bg-blue-500;
-        }
-
-        .radio-label {
-            @apply bg-blue-600;
+            @apply brightness-90;
         }
 
     /* minimalist theme */
         .theme-minimalist {
-            @apply bg-minimalist-gray text-minimalist-text;
-        }
+            @apply bg-minimalist-gray text-white;
 
-        .theme-minimalist button {
-            @apply bg-blue-600;
+            --button-color: rgb(37 99 235);
+            --green-button-color: rgb(22 163 74);
+            --radio-label-color: rgb(29 78 216);
         }
 
         .theme-minimalist .infoElement {
-            @apply bg-blue-600;
-        }
-
-        .theme-minimalist .radio-label {
-            @apply bg-blue-700;
-        }
-
-        .theme-minimalist #savePreferences {
-            @apply bg-green-600;
+            @apply brightness-100;
         }
 
         /* note */
@@ -69,13 +60,13 @@ button {
             @apply text-2xl;
             font-variant: small-caps;
         }
-
         .theme-minimalist #note h2 {
             @apply text-xl;
         }
         .theme-minimalist #note h3 {
             @apply text-lg;
         }
+
         .theme-minimalist #note > *:is(h4, h5, h6) {
             font-variant: small-caps;
         }
@@ -89,9 +80,31 @@ button {
             @apply text-xs;
         }
 
+/* index css */
+    /* featured notes */
+    .feat-note {
+        /* small:1 large:2 xlarge:3 per line */
+        @apply basis-auto grow w-3/4 lg:w-4/12 xl:w-1/4
+            bg-button-color hover:brightness-75
+            px-6 pt-2 pb-4 mx-2 my-3
+            rounded-2xl;
+    }
+    .feat-note h4 {
+        @apply text-xl mt-0 mb-2
+        whitespace-normal;
+
+        font-variant: small-caps;
+    }
+    .feat-note div {
+        @apply mt-0 inline-block max-w-full
+        line-clamp-2 md:line-clamp-3
+        whitespace-normal truncate;
+    }
+
 /* account css */
     .infoElement {
-        @apply basis-full mb-12
+        @apply bg-button-color
+        basis-full mb-12
         px-6 md:px-20 py-4 rounded-2xl;
     }
     .infoElement p, .infoElement {
@@ -100,14 +113,15 @@ button {
 
 /* settings css */
     #themeSettings .radio-label {
-        @apply px-4 py-2;
+        @apply bg-radio-label-color
+        px-4 py-2;
     }
     #themeSettings input {
         @apply hidden;
     }
 
     #savePreferences {
-        @apply bg-green-500;
+        @apply bg-green-button-color;
     }
 
 /* note css */

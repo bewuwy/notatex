@@ -46,7 +46,20 @@ admin.initializeApp({
 
 // index
 app.get("/", (req, res) => {
-    res.render('index');
+    const db = getDatabase();
+    const featured_ref = db.ref("global").child("featured");
+    let featured;
+
+    // TODO: change getting featured notes to on change from once
+    featured_ref.orderByKey().once('value', snapshot => {
+        let ft_data = snapshot.toJSON();
+
+        featured = Object.keys(ft_data).map(function (k) {
+            return ft_data[k];
+        });
+    }).then(r => {
+        res.render('index', {"featured": featured});
+    });
 });
 
 

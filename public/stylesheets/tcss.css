@@ -482,8 +482,27 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: auto;
 }
 
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.my-0 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 .mb-12 {
   margin-bottom: 3rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
 }
 
 .mb-2 {
@@ -554,6 +573,20 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 1.5rem;
 }
 
+.h-16 {
+  height: 4rem;
+}
+
+.h-36 {
+  height: 9rem;
+}
+
+.min-h-max {
+  min-height: -webkit-max-content;
+  min-height: -moz-max-content;
+  min-height: max-content;
+}
+
 .w-7 {
   width: 1.75rem;
 }
@@ -574,6 +607,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 83.333333%;
 }
 
+.w-3\/4 {
+  width: 75%;
+}
+
 .min-w-fit {
   min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
@@ -590,8 +627,24 @@ Ensure the default browser behavior of the `hidden` attribute.
   max-width: max-content;
 }
 
+.max-w-full {
+  max-width: 100%;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
 .basis-full {
   flex-basis: 100%;
+}
+
+.basis-auto {
+  flex-basis: auto;
 }
 
 .table-auto {
@@ -622,16 +675,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   place-items: end;
 }
 
-.content-end {
-  align-content: flex-end;
-}
-
-.items-end {
-  align-items: flex-end;
-}
-
 .items-center {
   align-items: center;
+}
+
+.items-stretch {
+  align-items: stretch;
 }
 
 .justify-center {
@@ -654,6 +703,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.whitespace-normal {
+  white-space: normal;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.break-words {
+  overflow-wrap: break-word;
 }
 
 .rounded-2xl {
@@ -690,6 +751,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-minimalist-gray {
   --tw-bg-opacity: 1;
   background-color: rgb(38 38 38 / var(--tw-bg-opacity));
+}
+
+.bg-button-color {
+  background-color: var(--button-color);
+}
+
+.bg-radio-label-color {
+  background-color: var(--radio-label-color);
 }
 
 .p-1 {
@@ -738,6 +807,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-top: 3rem;
 }
 
+.pt-2 {
+  padding-top: 0.5rem;
+}
+
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -761,14 +838,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 1.5rem;
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
-
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .text-lg {
@@ -823,6 +900,24 @@ Ensure the default browser behavior of the `hidden` attribute.
   transition-duration: 150ms;
 }
 
+.duration-200 {
+  transition-duration: 200ms;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
 body {
   min-height: 100vh;
   width: 100%;
@@ -849,6 +944,11 @@ h1 {
   font-weight: 700;
 }
 
+h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
 p {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -856,6 +956,7 @@ p {
 
 button {
   border-radius: 1rem;
+  background-color: var(--button-color);
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
@@ -879,21 +980,14 @@ body {
   background-color: rgb(30 41 59 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-button {
-  --tw-bg-opacity: 1;
-  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+  --button-color: rgb(96 165 250);
+  --green-button-color: rgb(34 197 94);
+  --radio-label-color: rgb(37 99 235);
 }
 
 .infoElement {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
-
-.radio-label {
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+  --tw-brightness: brightness(.9);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 /* minimalist theme */
@@ -902,27 +996,15 @@ button {
   --tw-bg-opacity: 1;
   background-color: rgb(38 38 38 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
-  color: rgb(209 209 209 / var(--tw-text-opacity));
-}
-
-.theme-minimalist button {
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  --button-color: rgb(37 99 235);
+  --green-button-color: rgb(22 163 74);
+  --radio-label-color: rgb(29 78 216);
 }
 
 .theme-minimalist .infoElement {
-  --tw-bg-opacity: 1;
-  background-color: rgb(37 99 235 / var(--tw-bg-opacity));
-}
-
-.theme-minimalist .radio-label {
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
-}
-
-.theme-minimalist #savePreferences {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
+  --tw-brightness: brightness(1);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 /* note */
@@ -967,12 +1049,82 @@ button {
   line-height: 1rem;
 }
 
+/* index css */
+
+/* featured notes */
+
+.feat-note {
+  /* small:1 large:2 xlarge:3 per line */
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  width: 75%;
+  flex-grow: 1;
+  flex-basis: auto;
+  border-radius: 1rem;
+  background-color: var(--button-color);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.feat-note:hover {
+  --tw-brightness: brightness(.75);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+@media (min-width: 1024px) {
+  .feat-note {
+    width: 33.333333%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .feat-note {
+    width: 25%;
+  }
+}
+
+.feat-note h4 {
+  margin-top: 0px;
+  margin-bottom: 0.5rem;
+  white-space: normal;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-variant: small-caps;
+}
+
+.feat-note div {
+  margin-top: 0px;
+  display: inline-block;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@media (min-width: 768px) {
+  .feat-note div {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
 /* account css */
 
 .infoElement {
   margin-bottom: 3rem;
   flex-basis: 100%;
   border-radius: 1rem;
+  background-color: var(--button-color);
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-top: 1rem;
@@ -995,6 +1147,7 @@ button {
 /* settings css */
 
 #themeSettings .radio-label {
+  background-color: var(--radio-label-color);
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
@@ -1006,8 +1159,7 @@ button {
 }
 
 #savePreferences {
-  --tw-bg-opacity: 1;
-  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  background-color: var(--green-button-color);
 }
 
 /* note css */
@@ -1147,11 +1299,22 @@ button {
   .md\:pb-24 {
     padding-bottom: 6rem;
   }
+
+  .md\:line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
 }
 
 @media (min-width: 1024px) {
   .lg\:block {
     display: block;
+  }
+
+  .lg\:w-4\/12 {
+    width: 33.333333%;
   }
 
   .lg\:pr-1\.5 {
@@ -1160,5 +1323,11 @@ button {
 
   .lg\:pr-1 {
     padding-right: 0.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:w-1\/4 {
+    width: 25%;
   }
 }
