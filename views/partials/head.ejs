@@ -14,9 +14,11 @@
     window.addEventListener("load", function () {
         // set theme
         switch (getCookie("theme")) {
-            case "minimalist":
-                document.body.classList.add("theme-minimalist");
-                break;
+            <% for (const [key, value] of Object.entries(themes)) { %>
+                case "<%- key %>":
+                    document.body.classList.add("<%- value["class"] -%>");
+                    break;
+            <% } %>
         }
     });
 </script>

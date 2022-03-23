@@ -32,6 +32,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// themes
+app.locals.themes = {
+    "default": {"name": "Default theme"},
+    "minimalist": {"class": "theme-minimalist", "source": "kepano/obsidian-minimal", "name": "Minimalist dark"},
+}
 
 // firebase admin setup
 const admin = require('firebase-admin');
@@ -77,13 +82,7 @@ app.get("/account", (req, res) => {
 
 // settings
 app.get("/settings", (req, res) => {
-    console.log(req.cookies.theme);
-
-    const themes_sources = {
-        "minimalist": "kepano/obsidian-minimal"
-    }
-
-   res.render("settings", {"theme_source": themes_sources[req.cookies.theme]});
+   res.render("settings", {"t_source": app.locals.themes[req.cookies.theme]["source"]});
 });
 
 
