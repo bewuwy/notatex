@@ -90,8 +90,8 @@ button {
             rounded-2xl;
     }
     .feat-note h4 {
-        @apply text-xl mt-0 mb-2
-        whitespace-normal;
+        @apply text-xl mt-1 mb-2
+        whitespace-normal line-clamp-2;
 
         font-variant: small-caps;
     }

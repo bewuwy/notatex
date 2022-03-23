@@ -1,6 +1,6 @@
 //imports
 
-// TODO: index page
+// TODO: better index page
 // TODO: api to add own notes
 // TODO: optimize API code
 
@@ -33,6 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // themes
+// TODO: add more themes
 app.locals.themes = {
     "default": {"name": "Default theme"},
     "minimalist": {"class": "theme-minimalist", "source": "kepano/obsidian-minimal", "name": "Minimalist dark"},
@@ -229,4 +230,6 @@ app.use(function(req, res) {
 module.exports = app;
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT);
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`)
+});
