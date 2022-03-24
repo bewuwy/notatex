@@ -83,7 +83,12 @@ app.get("/account", (req, res) => {
 
 // settings
 app.get("/settings", (req, res) => {
-   res.render("settings", {"t_source": app.locals.themes[req.cookies.theme]["source"]});
+    let t_source = null
+    if (req.cookies.theme) {
+        t_source = app.locals.themes[req.cookies.theme]["source"]
+    }
+
+    res.render("settings", {"t_source": t_source });
 });
 
 
