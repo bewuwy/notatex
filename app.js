@@ -53,12 +53,11 @@ admin.initializeApp({
 
 
 function renderView(req, res, view, args={}) {
-    let defArgs = {"theme": req.cookies.theme};
+    let defArgs = { "theme": req.cookies.theme || "default" };
 
     for (const key in args) {
         defArgs[key] = args[key];
     }
-    console.log(defArgs);
 
     return res.render(view, defArgs);
 }
@@ -79,7 +78,6 @@ app.get("/", (req, res) => {
         });
     }).then(r => {
         renderView(req, res, "index", {"featured": featured})
-        // res.render('index', {"featured": featured});
     });
 });
 
@@ -87,14 +85,12 @@ app.get("/", (req, res) => {
 // login
 app.get("/login", (req, res) => {
     renderView(req, res, "login");
-    // res.render("login");
 });
 
 
 // account
 app.get("/account", (req, res) => {
     renderView(req, res, "account");
-    // res.render("account");
 });
 
 
@@ -119,7 +115,6 @@ app.get('/note/:title', (req, res) => {
           title = title.toString().replace(/-/g, " ");
 
           renderView(req, res, "note", {"title": title, "content": note});
-          // res.render("note", { title: title, content: note });
       })
       .catch(error => {
           if (error.response.status === 404) {
