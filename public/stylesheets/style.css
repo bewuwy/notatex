@@ -80,6 +80,25 @@ button {
             @apply text-xs;
         }
 
+    /* primary theme */
+        .theme-primary {
+            @apply bg-primary-brown;
+        }
+
+        /* note */
+        .theme-primary #note {
+            @apply text-primary-text font-['Karla'];
+        }
+        .theme-primary #note > *:is(h1, h2, h3, h4, h5, h6) {
+            @apply text-primary-text-light;
+        }
+        .theme-primary #note strong {
+            @apply text-red-500;
+        }
+        .theme-primary #note em {
+            @apply text-blue-400;
+        }
+
 /* index css */
     /* featured notes */
     .feat-note {

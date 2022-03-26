@@ -37,6 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.locals.themes = {
     "default": {"name": "Default theme"},
     "minimalist": {"class": "theme-minimalist", "source": "kepano/obsidian-minimal", "name": "Minimalist dark"},
+    "primary": {"class": "theme-primary", "source": "ceciliamay/obsidianmd-theme-primary", "name": "Primary",
+        "fonts": ["https://fonts.googleapis.com/css2?family=Karla:wght@600&display=swap"]},
 }
 
 // firebase admin setup
