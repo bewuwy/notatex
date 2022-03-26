@@ -46,8 +46,20 @@ const serviceAccount = process.env.FIREBASE_PRIVATE;
 
 admin.initializeApp({
     credential: admin.credential.cert(JSON.parse(serviceAccount)),
-    databaseURL: process.env.FIREBASE_DB
+    databaseURL: process.env.FIREBASE_DB,
 });
+
+
+function renderView(req, res, view, args={}) {
+    let defArgs = {"theme": req.cookies.theme};
+
+    for (const key in args) {
+        defArgs[key] = args[key];
+    }
+    console.log(defArgs);
+
+    return res.render(view, defArgs);
+}
 
 
 // index
@@ -64,31 +76,29 @@ app.get("/", (req, res) => {
             return ft_data[k];
         });
     }).then(r => {
-        res.render('index', {"featured": featured});
+        renderView(req, res, "index", {"featured": featured})
+        // res.render('index', {"featured": featured});
     });
 });
 
 
 // login
 app.get("/login", (req, res) => {
-    res.render("login");
+    renderView(req, res, "login");
+    // res.render("login");
 });
 
 
 // account
 app.get("/account", (req, res) => {
-    res.render("account");
+    renderView(req, res, "account");
+    // res.render("account");
 });
 
 
 // settings
 app.get("/settings", (req, res) => {
-    let t_source = null
-    if (req.cookies.theme) {
-        t_source = app.locals.themes[req.cookies.theme]["source"]
-    }
-
-    res.render("settings", {"t_source": t_source });
+    renderView(req, res, "settings");
 });
 
 
@@ -106,7 +116,8 @@ app.get('/note/:title', (req, res) => {
           let title = req.params["title"];
           title = title.toString().replace(/-/g, " ");
 
-          res.render("note", { title: title, content: note });
+          renderView(req, res, "note", {"title": title, "content": note});
+          // res.render("note", { title: title, content: note });
       })
       .catch(error => {
           if (error.response.status === 404) {

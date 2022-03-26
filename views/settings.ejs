@@ -65,8 +65,8 @@
                             <% } %>
                         </div>
 
-                        <% if (t_source) { %>
-                            <div id="theme-source">Theme inspired from <a class="underline" target="_blank" href="https://github.com/<%- t_source -%>"><%- t_source -%></a> github project</div>
+                        <% if (themes[theme]["source"]) { %>
+                            <div id="theme-source">Theme inspired from <a class="underline" target="_blank" href="https://github.com/<%- themes[theme]['source'] -%>"><%- themes[theme]["source"] -%></a> github project</div>
                         <% } %>
                     </div>
                 </div>

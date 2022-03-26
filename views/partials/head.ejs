@@ -10,6 +10,14 @@
 <%- include('jsUtils'); %>
 <%- include('firebase'); %>
 
+<!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <% for (const font in themes[theme]["fonts"]) { %>
+        <link href="<%- themes[theme]["fonts"][font] %>>" rel="stylesheet">
+    <% } %>
+
 <script>
     window.addEventListener("load", function () {
         // set theme
