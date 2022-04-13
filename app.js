@@ -106,9 +106,30 @@ app.get('/note/:title', (req, res) => {
   axios
       .get(`https://raw.githubusercontent.com/bewu-ib/digital-garden/master/_notes/${req.params["title"]}.md`)
       .then(aRes => {
-          const md = new Remarkable();
+          let note = DOMPurify.sanitize(aRes.data.toString());
+          const md = new Remarkable({html: true, breaks: true});
 
-          let note = md.render(aRes.data);
+          // notes with titles
+          note = note.replace(/```ad-([\w\-]+)(?:.*|\n*)title:(.*)((?:.|\n)*?)```/g,
+              '<div class="$1-block rounded-2xl px-4 pb-2 pt-0.5 my-3 bg-gray-900">' +
+              '<p class="b-title">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 float-left" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">\n' +
+              '  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />\n' +
+              '</svg>$2</p>' +
+              '\n\n$3' +
+              '</div>');
+
+          // notes without titles
+          note = note.replace(/```ad-([\w\-]+)((?:.|\n)*?)```/g,
+              '<div class="$1-block rounded-2xl px-4 pb-2 pt-0.5 my-3 bg-gray-900">' +
+              '<p class="b-title">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 float-left" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">\n' +
+              '  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />\n' +
+              '</svg>Note</p>' +
+              '\n\n$2' +
+              '</div>');
+
+          note = md.render(note);
           note = DOMPurify.sanitize(note);
 
           let title = req.params["title"];
@@ -117,6 +138,7 @@ app.get('/note/:title', (req, res) => {
           renderView(req, res, "note", {"title": title, "content": note});
       })
       .catch(error => {
+          console.log(error);
           if (error.response.status === 404) {
               res.status(404).send('Bruh... 404...<br>' + req.url + " not found");
           }
@@ -127,6 +149,7 @@ app.get('/note/:title', (req, res) => {
   });
 });
 
+// notatex view
 // api/saveNote (user token, note id)
 app.post("/api/saveNote", (req, res) => {
    const userToken = req.body.userToken;

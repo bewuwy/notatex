@@ -37,7 +37,8 @@
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 // User is signed in.
-                console.log(user);
+                console.log("user logged in");
+                // console.log(user);
 
                 // set user info in topbar
                 document.getElementById("userInfo").textContent = `${user.displayName}`;

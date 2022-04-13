@@ -472,6 +472,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   visibility: visible;
 }
 
+.static {
+  position: static;
+}
+
 .absolute {
   position: absolute;
 }
@@ -488,60 +492,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   right: 2.5rem;
 }
 
-.top-4 {
-  top: 1rem;
+.float-left {
+  float: left;
 }
 
-.right-4 {
-  right: 1rem;
-}
-
-.top-8 {
-  top: 2rem;
-}
-
-.right-8 {
-  right: 2rem;
-}
-
-.right-1 {
-  right: 0.25rem;
-}
-
-.right-2 {
-  right: 0.5rem;
-}
-
-.right-3 {
-  right: 0.75rem;
-}
-
-.top-3 {
-  top: 0.75rem;
-}
-
-.top-0 {
-  top: 0px;
-}
-
-.right-0 {
-  right: 0px;
-}
-
-.top-6 {
-  top: 1.5rem;
-}
-
-.right-12 {
-  right: 3rem;
-}
-
-.right-11 {
-  right: 2.75rem;
-}
-
-.top-10 {
-  top: 2.5rem;
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .my-7 {
@@ -564,13 +521,17 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: 0.5rem;
 }
 
-.my-3 {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
+.mx-\[-1rem\] {
+  margin-left: -1rem;
+  margin-right: -1rem;
 }
 
 .mx-3 {
   margin-left: 0.75rem;
+  margin-right: 0.75rem;
+}
+
+.mr-3 {
   margin-right: 0.75rem;
 }
 
@@ -638,6 +599,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: none;
 }
 
+.h-6 {
+  height: 1.5rem;
+}
+
 .h-7 {
   height: 1.75rem;
 }
@@ -646,8 +611,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 1.25rem;
 }
 
-.h-6 {
-  height: 1.5rem;
+.w-6 {
+  width: 1.5rem;
 }
 
 .w-7 {
@@ -656,10 +621,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-5 {
   width: 1.25rem;
-}
-
-.w-6 {
-  width: 1.5rem;
 }
 
 .w-full {
@@ -793,6 +754,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-color: rgb(24 24 27 / var(--tw-border-opacity));
 }
 
+.bg-gray-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+}
+
 .bg-red-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(239 68 68 / var(--tw-bg-opacity));
@@ -834,15 +800,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }
 
-.bg-primary-brown {
-  --tw-bg-opacity: 1;
-  background-color: rgb(44 38 33 / var(--tw-bg-opacity));
-}
-
-.bg-none {
-  background-image: none;
-}
-
 .p-1 {
   padding: 0.25rem;
 }
@@ -882,27 +839,20 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-right: 0.5rem;
 }
 
-.px-20 {
-  padding-left: 5rem;
-  padding-right: 5rem;
+.pb-4 {
+  padding-bottom: 1rem;
 }
 
-.py-6 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
-
-.px-1 {
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-}
-
-.pb-16 {
-  padding-bottom: 4rem;
+.pt-0\.5 {
+  padding-top: 0.125rem;
 }
 
 .pt-0 {
   padding-top: 0px;
+}
+
+.pb-16 {
+  padding-bottom: 4rem;
 }
 
 .pr-3 {
@@ -921,12 +871,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-top: 0.5rem;
 }
 
-.pb-4 {
-  padding-bottom: 1rem;
-}
-
 .pb-2 {
   padding-bottom: 0.5rem;
+}
+
+.pb-3 {
+  padding-bottom: 0.75rem;
 }
 
 .align-text-bottom {
@@ -1408,6 +1358,36 @@ body {
   padding-right: 0.5rem;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+/* note blocks */
+
+#note .b-title {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-top: 0px;
+  margin-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+#note .note-block .b-title {
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+}
+
+#note > :is(.hint-block, .tip-block) > .b-title {
+  --tw-bg-opacity: 1;
+  background-color: rgb(16 185 129 / var(--tw-bg-opacity));
+}
+
+#note .info-block .b-title {
+  --tw-bg-opacity: 1;
+  background-color: rgb(20 184 166 / var(--tw-bg-opacity));
 }
 
 /* learn note css */

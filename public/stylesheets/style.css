@@ -183,3 +183,21 @@ button {
     #note td {
         @apply border-2 border-zinc-900 px-2 py-1;
     }
+
+    /* note blocks */
+    #note .b-title {
+        @apply mt-0 mb-2 mx-[-1rem] py-2 pl-4
+        font-bold text-lg;
+    }
+
+    #note .note-block .b-title {
+        @apply bg-blue-400;
+    }
+
+    #note > :is(.hint-block, .tip-block) > .b-title {
+        @apply bg-emerald-500;
+    }
+
+    #note .info-block .b-title {
+        @apply bg-teal-500;
+    }
