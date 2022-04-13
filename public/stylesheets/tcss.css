@@ -531,10 +531,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: 0.75rem;
 }
 
-.mr-3 {
-  margin-right: 0.75rem;
-}
-
 .mb-12 {
   margin-bottom: 3rem;
 }
@@ -573,6 +569,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .mt-1 {
   margin-top: 0.25rem;
+}
+
+.mr-3 {
+  margin-right: 0.75rem;
 }
 
 .block {
@@ -703,6 +703,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   align-items: center;
 }
 
+.items-baseline {
+  align-items: baseline;
+}
+
 .items-stretch {
   align-items: stretch;
 }
@@ -790,6 +794,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: var(--radio-label-color);
 }
 
+.bg-note-block-color {
+  background-color: var(--note-block-color);
+}
+
 .bg-gray-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity));
@@ -798,6 +806,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-gray-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+}
+
+.bg-info-block-color {
+  background-color: var(--info-block-color);
 }
 
 .p-1 {
@@ -839,8 +851,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-right: 0.5rem;
 }
 
-.pb-4 {
-  padding-bottom: 1rem;
+.pb-2 {
+  padding-bottom: 0.5rem;
 }
 
 .pt-0\.5 {
@@ -871,8 +883,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-top: 0.5rem;
 }
 
-.pb-2 {
-  padding-bottom: 0.5rem;
+.pb-4 {
+  padding-bottom: 1rem;
 }
 
 .pb-3 {
@@ -1057,6 +1069,9 @@ body {
   --green-button-color: rgb(34 197 94);
   --radio-label-color: rgb(37 99 235);
   --card-color: rgb(79 70 229);
+  --note-block-color: rgb(96 165 250);
+  --info-block-color: rgb(20 184 166);
+  --hint-block-color: rgb(16 185 129);
 }
 
 .infoElement {
@@ -1074,6 +1089,9 @@ body {
   --button-color: rgb(37 99 235);
   --green-button-color: rgb(22 163 74);
   --radio-label-color: rgb(29 78 216);
+  --note-block-color: rgb(2 132 199);
+  --info-block-color: rgb(13 148 136);
+  --hint-block-color: rgb(5 150 105);
 }
 
 .theme-minimalist .infoElement {
@@ -1367,27 +1385,51 @@ body {
   margin-right: -1rem;
   margin-top: 0px;
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
   font-size: 1.125rem;
   line-height: 1.75rem;
   font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
+
+#note .b-title svg {
+  float: left;
+  margin-right: 0.75rem;
+}
+
+/* note block */
 
 #note .note-block .b-title {
-  --tw-bg-opacity: 1;
-  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+  background-color: var(--note-block-color);
 }
+
+#note .note-block .b-title svg.pen {
+  display: block;
+}
+
+/* hint/tip block */
 
 #note > :is(.hint-block, .tip-block) > .b-title {
-  --tw-bg-opacity: 1;
-  background-color: rgb(16 185 129 / var(--tw-bg-opacity));
+  background-color: var(--hint-block-color);
 }
 
+#note > :is(.hint-block, .tip-block) > .b-title > svg.fire {
+  display: block;
+}
+
+/* info block */
+
 #note .info-block .b-title {
-  --tw-bg-opacity: 1;
-  background-color: rgb(20 184 166 / var(--tw-bg-opacity));
+  background-color: var(--info-block-color);
+}
+
+#note .info-block .b-title svg.info {
+  display: block;
 }
 
 /* learn note css */

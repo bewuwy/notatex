@@ -32,6 +32,10 @@ button {
             --button-color: rgb(96 165 250);
             --green-button-color: rgb(34 197 94);
             --radio-label-color: rgb(37 99 235);
+
+            --note-block-color: rgb(96 165 250);
+            --info-block-color: rgb(20 184 166);
+            --hint-block-color: rgb(16 185 129);
         }
 
         .infoElement {
@@ -45,6 +49,10 @@ button {
             --button-color: rgb(37 99 235);
             --green-button-color: rgb(22 163 74);
             --radio-label-color: rgb(29 78 216);
+
+            --note-block-color: rgb(2 132 199);
+            --info-block-color: rgb(13 148 136);
+            --hint-block-color: rgb(5 150 105);;
         }
 
         .theme-minimalist .infoElement {
@@ -187,17 +195,35 @@ button {
     /* note blocks */
     #note .b-title {
         @apply mt-0 mb-2 mx-[-1rem] py-2 pl-4
-        font-bold text-lg;
+        font-bold text-lg
+        text-white
+        flex items-center;
+    }
+    #note .b-title svg {
+        @apply float-left mr-3;
     }
 
+    /* note block */
     #note .note-block .b-title {
-        @apply bg-blue-400;
+        @apply bg-note-block-color
+    }
+    #note .note-block .b-title svg.pen {
+        @apply block;
     }
 
+    /* hint/tip block */
     #note > :is(.hint-block, .tip-block) > .b-title {
-        @apply bg-emerald-500;
+        @apply bg-hint-block-color;
+    }
+    #note > :is(.hint-block, .tip-block) > .b-title > svg.fire {
+        @apply block;
     }
 
+    /* info block */
     #note .info-block .b-title {
-        @apply bg-teal-500;
+        @apply bg-info-block-color;
+    }
+    #note .info-block .b-title svg.info {
+        @apply block;
+    }
     }
