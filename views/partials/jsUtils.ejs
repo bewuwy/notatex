@@ -44,11 +44,25 @@
         document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
 
-    // classes function
+    // element classes function
     function setBgColor(el, className) {
         const classes = el.className.split(" ").filter(c => !c.startsWith("bg-"));
         el.className = classes.join(" ").trim();
 
         el.classList.add(className);
+    }
+
+    // util class
+    class TwoWayMap {
+        constructor(map) {
+            this.map = map;
+            this.reverseMap = {};
+            for(const key in map) {
+                const value = map[key];
+                this.reverseMap[value] = key;
+            }
+        }
+        get(key) { return this.map[key]; }
+        revGet(key) { return this.reverseMap[key]; }
     }
 </script>

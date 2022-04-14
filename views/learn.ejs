@@ -12,20 +12,40 @@
                 btn.classList.toggle("-hide");
             }
 
+            const statusColors = new TwoWayMap({
+                0: "bg-red-500",
+                1: "bg-yellow-500",
+                2: "bg-green-500"
+            });
+
             function setCard(card, status) {
                 const cardBg = document.getElementById(`card-${card}-bg`);
                 learn_ref.child(`card-${card.toString()}`).set(status);
 
-                switch (status) {
-                    case 0:
-                        setBgColor(cardBg, "bg-red-500");
-                        break
-                    case 1:
-                        setBgColor(cardBg, "bg-yellow-500");
-                        break
-                    case 2:
-                        setBgColor(cardBg, "bg-green-500");
-                        break
+                setBgColor(cardBg, statusColors.get(status));
+            }
+
+            function unFilterCards() {
+                const cards = document.getElementById("note").children;
+
+                for (let i = 0; i < cards.length; i++) {
+                    cards[i].classList.remove("hidden");
+                }
+            }
+
+            function filterCards(f_status) {
+                const cards = document.getElementById("note").children;
+
+                for (let i = 0; i < cards.length; i++) {
+                    const cardBg = cards[i].className.split(" ").filter(c => c.startsWith("bg-"))[0];
+                    const status = statusColors.revGet(cardBg);
+
+                    if (status.toString() !== f_status.toString()) {
+                        cards[i].classList.add("hidden");
+                    }
+                    else {
+                        cards[i].classList.remove("hidden");
+                    }
                 }
             }
 
@@ -43,19 +63,11 @@
 
                             for (const [key, value] of Object.entries(learnData)) {
                                 const cardBg = document.getElementById((`${key}-bg`));
-                                switch (value) {
-                                    case 0:
-                                        setBgColor(cardBg, "bg-red-500");
-                                        break
-                                    case 1:
-                                        setBgColor(cardBg, "bg-yellow-500");
-                                        break
-                                    case 2:
-                                        setBgColor(cardBg, "bg-green-500");
-                                        break
-                                }
+                                setBgColor(cardBg, statusColors.get(value));
                             }
-                        }));
+                        })).then(() => {
+                            // filterCards(1);
+                        });
                     }
                 });
             });
@@ -68,8 +80,33 @@
                 <%- include('partials/topBar'); %>
             </div>
 
-            <div class="my-7 md:my-10">
+            <div class="mt-7 md:mt-10">
                 <h1 class="mb-2 md:mb-0"><%= title %></h1>
+            </div>
+
+            <div id="filters" class="mb-7 md:mb-7">
+                <h3>Filters</h3>
+                <!-- TODO: change button titles -->
+                <button class="bg-gray-700" onclick="unFilterCards()" title="Remove cards filter">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                </button>
+                <button class="bg-gray-700" onclick="filterCards(0)" title="Filter unknown cards">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                </button>
+                <button class="bg-gray-700" onclick="filterCards(1)" title="Filter somewhat known cards">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                </button>
+                <button class="bg-gray-700" onclick="filterCards(2)" title="Filter well-known cards">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                </button>
             </div>
 
             <div id="note">
