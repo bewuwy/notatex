@@ -43,4 +43,12 @@
     function eraseCookie(name) {
         document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
+
+    // classes function
+    function setBgColor(el, className) {
+        const classes = el.className.split(" ").filter(c => !c.startsWith("bg-"));
+        el.className = classes.join(" ").trim();
+
+        el.classList.add(className);
+    }
 </script>

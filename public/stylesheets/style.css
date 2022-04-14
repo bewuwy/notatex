@@ -32,6 +32,9 @@ button {
             --button-color: rgb(96 165 250);
             --green-button-color: rgb(34 197 94);
             --radio-label-color: rgb(37 99 235);
+            --card-color: rgb(2 132 199);
+                    /*rgb(96 165 250);*/
+                    /*rgb(79 70 229);*/
 
             --note-block-color: rgb(96 165 250);
             --info-block-color: rgb(20 184 166);
@@ -226,4 +229,25 @@ button {
     #note .info-block .b-title svg.info {
         @apply block;
     }
+
+/* learn note css */
+    .-hide .-show-child {
+        @apply hidden;
+    }
+    .-hide .-hide-child {
+        @apply block;
+    }
+    .-show-child {
+        @apply block;
+    }
+    .-hide-child {
+        @apply hidden;
+    }
+
+    .hidespoilers .spoiler {
+        @apply md:text-transparent md:bg-gray-700 hover:text-inherit;
+    }
+
+    .card-buttons button {
+        @apply bg-gray-700 mx-3 px-6;
     }

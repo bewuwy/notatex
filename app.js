@@ -164,7 +164,76 @@ app.get('/note/:title', (req, res) => {
   });
 });
 
-// notatex view
+// notatex learn view
+app.get('/learn/:title', (req, res) => {
+    const testNote = [
+        {"title": "Skutki kolonializmu",
+        "content":
+            "- rozwinęło się ||**niewolnictwo**||,\n" +
+            "- zaszły zmiany w strukturze:\n" +
+            "\t- ||odmian ludzkich — wśród rdzennych mieszkańców biali ludzie||,\n" +
+            "\t- ||wyznaniowej — wzrósł udział religii dominującej w imperium kolonialnym||,\n" +
+            "\t- językowej — wprowadzano język kraju kolonizującego,\n" +
+            "- narzucane zostały **europejskie style życia** → wypieranie elementów kultury i tradycji rdzennej ludności,\n" +
+            "- intensywnie **eksploatowano surowce naturalne**."},
+        {"title": "Dekolonizacja",
+        "content": "głównie w **XIX i XX w.** \n" +
+            "\n" +
+            "- Najpierw doszło do niej w **Ameryce Północnej**, w *XVIII w.* — 13 brytyjskich kolonii uległo przekształceniu w niepodległe Stany Zjednoczone.\n" +
+            "- Następnie w **Ameryce Łacińskiej**, na skutek walk przeciw Hiszpanii i Portugalii większość krajów odzyskała niepodległość.\n" +
+            "- Po *II wojnie światowej* w **Azji**: Filipiny, Indie, Pakistan.\n" +
+            "- Najpóźniejsza dekolonizacja była w **Afryce**, w *1960 roku* powstało najwięcej krajów (17), dlatego nazwano go **Rokiem Afryki**."},
+        {"title": "Funkcje twojej starej bla bla haha jestem długim tytułem, ale tak frrrrr długim essa z tobą byniu",
+        "content": "O nie, to był ||długi tytuł||"},
+        {"title": "Krótki",
+        "content": "Mam krótki ||tytuł||, ale pierwszą linijkę już nie hahahahahahahahaahahah nie masz starego lore impus weksel weksel weksel rodo rodo rdo usuwam dane ha ha ha ha ha brak starrego"}
+    ]
+
+    const md = new Remarkable();
+    const parserRules = [
+        { pattern: /\|\|(.*?)\|\|/g, replacement: '<span class="spoiler">$1</span>' },
+        // { pattern: "<h\d>(.*?)<\/h\d>/g", replacement: '<b>$1</b>' },
+    ];
+
+    for (const testNoteKey in testNote) {
+        testNote[testNoteKey]["content"] = md.render(testNote[testNoteKey]["content"]);
+
+        for (const k in parserRules) {
+            testNote[testNoteKey]["content"] = testNote[testNoteKey]["content"]
+                .replace(parserRules[k].pattern, parserRules[k].replacement);
+        }
+    }
+
+    let title = req.params["title"].toString().replace(/-/g, " ");
+
+    renderView(req, res, "learn", {"title": title, "cards": testNote, "id": req.params['title']});
+    // res.render("learnNote", { title: title, cards: testNote })
+
+    // // get note from github repo
+    // axios
+    //     .get(`https://raw.githubusercontent.com/bewu-ib/digital-garden/master/_notes/${req.params["title"]}.md`)
+    //     .then(aRes => {
+    //         let title = req.params["title"].toString().replace(/-/g, " ");
+    //
+    //         const md = new Remarkable();
+    //         let note = md.render(aRes.data);
+    //
+    //         note = note.toString().split("<h1>");
+    //
+    //         console.log(note);
+    //         res.render("note", { title: title, content: note.join("<br>") });
+    //     })
+    //     .catch(error => {
+    //         if (error.response.status === 404) {
+    //             res.status(404).send('Bruh... 404...<br>' + req.url + " not found");
+    //         }
+    //         else {
+    //             console.error(error);
+    //             res.send(error.toString());
+    //         }
+    //     });
+});
+
 // api/saveNote (user token, note id)
 app.post("/api/saveNote", (req, res) => {
    const userToken = req.body.userToken;
