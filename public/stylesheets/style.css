@@ -94,6 +94,8 @@ button {
     /* primary theme */
         .theme-primary {
             @apply bg-primary-brown;
+
+            --card-color: rgb(17 24 39);
         }
 
         /* note */
@@ -230,7 +232,7 @@ button {
         @apply block;
     }
 
-/* learn note css */
+/* learn note / cards css */
     .-hide .-show-child {
         @apply hidden;
     }
@@ -244,8 +246,8 @@ button {
         @apply hidden;
     }
 
-    .hidespoilers .spoiler {
-        @apply md:text-transparent md:bg-gray-700 hover:text-inherit;
+    .hidespoilers .spoiler, .hidespoilers .spoiler * {
+        @apply md:!text-transparent md:!bg-gray-700 hover:!text-inherit;
     }
 
     .card-buttons button {

@@ -65,15 +65,14 @@
                                 const cardBg = document.getElementById((`${key}-bg`));
                                 setBgColor(cardBg, statusColors.get(value));
                             }
-                        })).then(() => {
-                            // filterCards(1);
-                        });
+                        }));
                     }
                 });
             });
         </script>
     </head>
     <body>
+        <!-- TODO: add notification for users not logged in -->
         <div id="content" class="pb-16 md:pb-24">
 
             <div class="text-white">
@@ -86,6 +85,7 @@
 
             <div id="filters" class="mb-7 md:mb-7">
                 <h3>Filters</h3>
+                <!-- TODO: move to the side? -->
                 <!-- TODO: change button titles -->
                 <button class="bg-gray-700" onclick="unFilterCards()" title="Remove cards filter">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
