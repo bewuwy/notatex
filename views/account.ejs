@@ -36,6 +36,16 @@
 
                                 accInf.appendChild(createParagraph(`Account created: ${tDelta}`, user.metadata.creationTime));
 
+                            // user id
+                                const uid_ = document.createElement("span");
+                                uid_.classList.add("spoiler");  // TODO: add some kind of spoiler
+                                uid_.innerText = user.uid;
+
+                                const p_ = createParagraph(`User ID: `);
+                                p_.appendChild(uid_);
+
+                                accInf.appendChild(p_);
+
                         // load saved notes
                             getSavedNotes(user.uid).then(res => res.json()).then(data => {
                                 savedNotesDiv.innerHTML = "";

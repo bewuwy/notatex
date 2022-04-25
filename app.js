@@ -44,6 +44,7 @@ app.locals.themes = {
 // firebase admin setup
 const admin = require('firebase-admin');
 const { getDatabase } = require('firebase-admin/database');
+const { getAuth } = require("firebase-admin/auth");
 const serviceAccount = process.env.FIREBASE_PRIVATE;
 
 admin.initializeApp({
@@ -52,13 +53,14 @@ admin.initializeApp({
 });
 
 
-function renderView(req, res, view, args={}) {
+function renderView(req, res, view, args={}, code=200) {
     let defArgs = { "theme": req.cookies.theme || "default" };
 
     for (const key in args) {
         defArgs[key] = args[key];
     }
 
+    res.status(code);
     return res.render(view, defArgs);
 }
 
@@ -164,7 +166,48 @@ app.get('/note/:title', (req, res) => {
   });
 });
 
-// notatex view
+
+// user
+app.get("/user/:user", (req, res) => {
+    const notesList = "https://api.github.com/repos/bewu-ib/digital-garden/git/trees/2b9764451c79a5a9f52632423318ee2d96bf2270";
+
+    const db = getDatabase();
+    const userRef = db.ref("users").child(req.params["user"]);
+
+    let user;
+
+    getAuth().getUser(req.params["user"]).then(userRecord => {
+        user = userRecord.displayName;
+
+        let userData;
+        userRef.once("value", snapshot => {
+           userData = snapshot.toJSON();
+        }).then(() => {
+            let verified = false;
+            if (userData && userData.info) {
+                verified = userData.info.verified;
+            }
+
+            axios.get(notesList).then(r => {
+                let noteList = [];
+                for (const dataKey in r.data['tree']) {
+                    const n = r.data['tree'][dataKey]["path"].split(".md")[0];
+                    noteList.push(n);
+                }
+
+                return renderView(req, res, "user", {"user": user, "verified": verified,
+                    "noteList": noteList});
+            });
+        });
+    }).catch(e => {
+        user = "User not found";
+        console.log(e);
+
+        return renderView(req, res, "404");
+    });
+});
+
+
 // api/saveNote (user token, note id)
 app.post("/api/saveNote", (req, res) => {
    const userToken = req.body.userToken;
