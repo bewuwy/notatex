@@ -8,8 +8,6 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
-            const db = firebase.database();
-
             function initiateLoad() {
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
@@ -19,6 +17,7 @@
                         firebase.database().ref('/users/' + user.uid + "/info/notesUrl").once('value').then((snapshot) => {
                             const data = snapshot.toJSON();
                             $("#yourNotesUrl").val(data);
+                            loadCreatedNotes(data);
                         });
 
                         const savedNotesDiv = document.getElementById("savedNotes");
@@ -110,20 +109,24 @@
                         return
                     }
 
-                    $.getJSON(val, function (result) {
-                        const yourNotes = result["tree"];
-
-                        $("#createdNotes").html("");
-                        for (let i = 0; i < yourNotes.length; i++) {
-                            const n = yourNotes[i]["path"].split(".md")[0];
-
-                            $("#createdNotes").append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${n}\">${n}</a></p>`);
-                        }
-                    });
+                    loadCreatedNotes(val);
 
                     const updates = {"notesUrl": val};
                     firebase.database().ref(`users/${firebase.auth().currentUser.uid}/info`).update(updates);
                 };
+                function loadCreatedNotes(url) {
+                    $.getJSON(url, function (result) {
+                        const yourNotes = result["tree"];
+                        const crN = $("#createdNotes");
+
+                        crN.html("");
+                        for (let i = 0; i < yourNotes.length; i++) {
+                            const n = yourNotes[i]["path"].split(".md")[0];
+
+                            crN.append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${n}\">${n}</a></p>`);
+                        }
+                    });
+                }
 
                 // search
                 search("savedSearch", "savedNotes", "s-");
