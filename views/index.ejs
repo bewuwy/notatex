@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <%- include('partials/head'); %>
 
-    <meta name="description" content="NotaTex is the best note-taking tool for both making and learning notes on the web.">
-  </head>
-  <body>
-    <div id="content">
+    <meta name="description"
+          content="NotaTex is the best note-taking tool for both making and learning notes on the web.">
+</head>
+<body>
+<div id="content">
 
-      <div class="mb-12">
+    <div class="mb-12">
         <%- include('partials/topBar'); %>
-      </div>
+    </div>
 
-      <div id="featured-notes">
+    <div id="featured-notes">
         <h3>Featured notes</h3>
         <div id="featured-notes-content" class="flex flex-wrap items-stretch">
-          <% for(var i=0; i < featured.length; i++) { %>
+            <% for(var i=0; i < featured.length; i++) { %>
             <div class="feat-note" onclick="window.location=`/note/<%- featured[i]['id'] -%>`">
-              <h4><%- featured[i]['title'] -%></h4>
-              <div><%- featured[i]['prev'] -%></div>
+                <h4><%- featured[i]['title'] -%></h4>
+                <div><%- featured[i]['prev'] -%></div>
             </div>
-          <% } %>
+            <% } %>
 
         </div>
-      </div>
-
     </div>
-  </body>
+
+</div>
+</body>
 </html>

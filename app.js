@@ -169,8 +169,7 @@ app.get('/note/:title', (req, res) => {
 
 // user
 app.get("/user/:user", (req, res) => {
-    const notesList = "https://api.github.com/repos/bewu-ib/digital-garden/git/trees/2b9764451c79a5a9f52632423318ee2d96bf2270";
-
+    // TODO: custom URLs like /user/bewu
     const db = getDatabase();
     const userRef = db.ref("users").child(req.params["user"]);
 
@@ -185,15 +184,26 @@ app.get("/user/:user", (req, res) => {
         created = `${created.getDate()}/${created.getMonth()}/${created.getFullYear()}`;
 
         let userData;
+        let notesList;
+
         userRef.once("value", snapshot => {
-           userData = snapshot.toJSON();
+            userData = snapshot.toJSON();
+            notesList = userData["info"]["notesUrl"];
         }).then(() => {
             let verified = false;
             if (userData && userData.info) {
                 verified = userData.info.verified;
             }
 
-            axios.get(notesList).then(r => {
+            axios.get(notesList).catch(function (error) {
+                return renderView(req, res, "user",
+                    {"user": user, "verified": verified, "created": created, "noteList": []});
+            }).then(r => {
+                if (!r || !"tree" in r.data) {
+                    return renderView(req, res, "user",
+                        {"user": user, "verified": verified, "created": created, "noteList": []});
+                }
+
                 let noteList = [];
                 for (const dataKey in r.data['tree']) {
                     const n = r.data['tree'][dataKey]["path"].split(".md")[0];

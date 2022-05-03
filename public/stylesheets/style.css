@@ -131,7 +131,7 @@ button {
 /* account css */
     .infoElement {
         @apply bg-button-color
-        basis-full mb-12
+        basis-full mb-10
         px-6 md:px-20 py-4 rounded-2xl;
     }
     .infoElement p, .infoElement {

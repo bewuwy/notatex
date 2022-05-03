@@ -2,14 +2,25 @@
 <html lang="en">
     <head>
         <%- include('partials/head'); %>
+        <%- include('partials/jsUtils'); %>
         <script src="/javascripts/userData.js"></script>
-        <script src="/javascripts/utils.js"></script>
+        <!-- jquery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
+            const db = firebase.database();
+
             function initiateLoad() {
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
                         // User is signed in.
+
+                        // user notes url get
+                        firebase.database().ref('/users/' + user.uid + "/info/notesUrl").once('value').then((snapshot) => {
+                            const data = snapshot.toJSON();
+                            $("#yourNotesUrl").val(data);
+                        });
+
                         const savedNotesDiv = document.getElementById("savedNotes");
                         const accInf = document.getElementById("accountInfo");
 
@@ -60,6 +71,8 @@
                                         a.classList.value = "hover:underline hover:font-bold text-md";
 
                                         p.appendChild(a);
+                                        p.id = "s-" + e;
+
                                         savedNotesDiv.appendChild(p);
                                     });
                                 }
@@ -89,6 +102,32 @@
                 }, function(error) {
                     console.log(error);
                 });
+
+                document.querySelector("#saveNotesUrl").onclick = function () {
+                    const val = document.querySelector("#yourNotesUrl").value;
+                    if (!isValidURL(val)) {
+                        alert("Not a valid url");
+                        return
+                    }
+
+                    $.getJSON(val, function (result) {
+                        const yourNotes = result["tree"];
+
+                        $("#createdNotes").html("");
+                        for (let i = 0; i < yourNotes.length; i++) {
+                            const n = yourNotes[i]["path"].split(".md")[0];
+
+                            $("#createdNotes").append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${n}\">${n}</a></p>`);
+                        }
+                    });
+
+                    const updates = {"notesUrl": val};
+                    firebase.database().ref(`users/${firebase.auth().currentUser.uid}/info`).update(updates);
+                };
+
+                // search
+                search("savedSearch", "savedNotes", "s-");
+                search("yourSearch", "createdNotes", "c-");
             }
         </script>
     </head>
@@ -100,15 +139,48 @@
             </div>
 
             <div class="flex flex-wrap justify-center">
-                <div class="infoElement">
-
+                <div class="infoElement" id="savedNotesContainer">
                     <h2 class="text-2xl">
                         <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                         </svg>
                         Saved notes
                     </h2>
+
+                    <div id="savedNoteSearch" class="flex items-center">
+                        <input id="savedSearch" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                        <label for="savedSearch">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </label>
+                    </div>
                     <div id="savedNotes">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+
+                <div class="infoElement" id="yourNotesContainer">
+                    <h2 class="text-2xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Your notes
+                    </h2>
+
+                    <div class="flex mb-2">
+                        <input id="yourNotesUrl" type="text" placeholder="Your notes github repo url" class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                        <button class="ml-2 bg-green-button-color" id="saveNotesUrl">Save</button>
+                    </div>
+                    <div id="yourNoteSearch" class="flex items-center">
+                        <input id="yourSearch" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                        <label for="savedSearch">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </label>
+                    </div>
+                    <div id="createdNotes">
                         <p>Loading...</p>
                     </div>
                 </div>
