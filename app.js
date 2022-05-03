@@ -175,9 +175,14 @@ app.get("/user/:user", (req, res) => {
     const userRef = db.ref("users").child(req.params["user"]);
 
     let user;
+    let created;
 
     getAuth().getUser(req.params["user"]).then(userRecord => {
+        // console.log(userRecord);
+
         user = userRecord.displayName;
+        created = new Date(userRecord.metadata.creationTime);
+        created = `${created.getDate()}/${created.getMonth()}/${created.getFullYear()}`;
 
         let userData;
         userRef.once("value", snapshot => {
@@ -195,7 +200,7 @@ app.get("/user/:user", (req, res) => {
                     noteList.push(n);
                 }
 
-                return renderView(req, res, "user", {"user": user, "verified": verified,
+                return renderView(req, res, "user", {"user": user, "verified": verified, "created": created,
                     "noteList": noteList});
             });
         });
