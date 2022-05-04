@@ -56,9 +56,9 @@
                     </h2>
                     <div id="preferencesForm">
                         <h4>Theme</h4>
-                        <div id="themeSettings" class="flex mb-4">
+                        <div id="themeSettings" class="flex flex-wrap mb-4">
                             <% for (const [key, value] of Object.entries(themes)) { %>
-                                <div>
+                                <div class="my-2">
                                     <input type="radio" name="theme" value="<%- key -%>" id="<%- key -%>" class="peer">
                                     <label for="<%- key -%>" class="peer-checked:brightness-75 radio-label"><%- value["name"] -%></label>
                                 </div>
