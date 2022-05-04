@@ -13,6 +13,7 @@ module.exports = {
         'primary-text-light': '#E6CFB3',
 
         'button-color': 'var(--button-color)',
+        'dark-button-color': 'var(--dark-button-color)',
         'green-button-color': 'var(--green-button-color)',
         'radio-label-color': 'var(--radio-label-color)',
         'note-block-color': 'var(--note-block-color)',

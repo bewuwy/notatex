@@ -51,7 +51,7 @@
     }
 
     // note search
-    function search(inputId, itemsContainerId, itemsPrefix="") {
+    function addSearchById(inputId, itemsContainerId, itemsPrefix="") {
         $(`#${inputId}`).on("input", function() {
             const val = $(this).val().toLowerCase();
             const notes = $(`#${itemsContainerId}`).children();
