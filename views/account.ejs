@@ -17,7 +17,7 @@
                         firebase.database().ref('/users/' + user.uid + "/info/notesUrl").once('value').then((snapshot) => {
                             const data = snapshot.toJSON();
                             $("#yourNotesUrl").val(data);
-                            loadCreatedNotes(data);
+                            loadYourNotes(data);
                         });
 
                         const savedNotesDiv = document.getElementById("savedNotes");
@@ -76,6 +76,7 @@
                                     });
                                 }
                                 else {
+                                    $("#savedNoteSearch").hide();
                                     savedNotesDiv.appendChild(createParagraph("No saved notes D:"));
                                 }
                             });
@@ -104,33 +105,44 @@
 
                 document.querySelector("#saveNotesUrl").onclick = function () {
                     const val = document.querySelector("#yourNotesUrl").value;
-                    if (!isValidURL(val)) {
+                    if (!isValidURL(val) && val) {
                         alert("Not a valid url");  // TODO: change to a prettier alert
                         return
                     }
 
-                    loadCreatedNotes(val);
+                    loadYourNotes(val);
 
                     const updates = {"notesUrl": val};
                     firebase.database().ref(`users/${firebase.auth().currentUser.uid}/info`).update(updates);
                 };
-                function loadCreatedNotes(url) {
-                    $.getJSON(url, function (result) {
-                        const yourNotes = result["tree"];
-                        const crN = $("#createdNotes");
+                function loadYourNotes(url) {
+                    if (url) {
+                        $("#yourNotesList").show();
+                        $.getJSON(url, function (result) {
+                            const yourNotes = result["tree"];
+                            const crN = $("#yourNotes");
 
-                        crN.html("");
-                        for (let i = 0; i < yourNotes.length; i++) {
-                            const n = yourNotes[i]["path"].split(".md")[0];
+                            crN.html("");
+                            if (yourNotes.length < 1) {
+                                $("#yourNotesList").hide();
+                            }
+                            else {
+                                for (let i = 0; i < yourNotes.length; i++) {
+                                    const n = yourNotes[i]["path"].split(".md")[0];
 
-                            crN.append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${n}\">${n}</a></p>`);
-                        }
-                    });
+                                    crN.append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${n}\">${n}</a></p>`);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $("#yourNotesList").hide();
+                    }
                 }
 
                 // search
                 addSearchById("savedSearch", "savedNotes", "s-");
-                addSearchById("yourSearch", "createdNotes", "c-");
+                addSearchById("yourSearch", "yourNotes", "c-");
             }
         </script>
     </head>
@@ -179,16 +191,19 @@
                             <input id="yourNotesUrl" type="text" placeholder="Your notes github repo url" class="text-gray-700 px-3 py-2 w-full rounded-xl">
                             <button class="ml-2 bg-green-button-color" id="saveNotesUrl">Save</button>
                         </div>
-                        <div id="yourNoteSearch" class="flex items-center">
-                            <input id="yourSearch" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
-                            <label for="savedSearch">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                            </label>
-                        </div>
-                        <div id="createdNotes">
-                            <p>Loading...</p>
+
+                        <div id="yourNotesList">
+                            <div id="yourNoteSearch" class="flex items-center">
+                                <input id="yourSearch" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                                <label for="savedSearch">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </label>
+                            </div>
+                            <div id="yourNotes">
+                                <p>Loading...</p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -111,7 +111,7 @@ app.get('/note/:title', (req, res) => {
           let note = DOMPurify.sanitize(aRes.data.toString());
           const md = new Remarkable({html: true, breaks: true});
 
-          // notes with titles
+          // ad-notes with titles
           note = note.replace(/```ad-([\w\-]+)(?:.*|\n*)title:(.*)((?:.|\n)*?)```/g,
               '<div class="$1-block rounded-2xl px-4 pb-2 pt-0.5 my-3 bg-gray-900">' +
               '<p class="b-title">' +
@@ -128,7 +128,7 @@ app.get('/note/:title', (req, res) => {
               '\n\n$3' +
               '</div>');
 
-          // notes without titles
+          // ad-notes without titles
           note = note.replace(/```ad-([\w\-]+)((?:.|\n)*?)```/g,
               '<div class="$1-block rounded-2xl px-4 pb-2 pt-0.5 my-3 bg-gray-900">' +
               '<p class="b-title">' +
@@ -181,7 +181,7 @@ app.get("/user/:user", (req, res) => {
 
         user = userRecord.displayName;
         created = new Date(userRecord.metadata.creationTime);
-        created = `${created.getDate()}/${created.getMonth()}/${created.getFullYear()}`;
+        created = `${created.getDate()}/${created.getMonth()+1}/${created.getFullYear()}`;
 
         let userData;
         let notesList;
