@@ -58,11 +58,11 @@
 
             for (let i = 0; i < notes.length; i++) {
                 const n = notes[i].id.toLowerCase().slice(itemsPrefix.length);
-                if (!n.includes(val)) {
-                    $(`#${notes[i].id}`).hide();
+                if (n.indexOf(val) === -1) {
+                    $(`[id=\"${notes[i].id}\"]`).addClass("hidden");
                 }
                 else {
-                    $(`#${notes[i].id}`).show();
+                    $(`[id=\"${notes[i].id}\"]`).removeClass("hidden");
                 }
             }
         });
