@@ -141,7 +141,10 @@ app.get('/note/:uid/:nid', (req, res) => {
 
                         const title = noteId.toString().replace(/-/g, " ");
 
-                        return renderView(req, res, "note", {"title": title, "userName": userName, "content": note});
+                        return renderView(req, res, "note", {
+                            "title": title, "userName": userName, "uid": userId,
+                            "content": note
+                        });
                     })
                     .catch(error => {
                         console.log(error);
