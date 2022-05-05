@@ -43,4 +43,28 @@
     function eraseCookie(name) {
         document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
+
+    function isValidURL(string) {
+        const res = string.match(
+            /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+        return (res !== null)
+    }
+
+    // note search
+    function addSearchById(inputId, itemsContainerId, itemsPrefix="") {
+        $(`#${inputId}`).on("input", function() {
+            const val = $(this).val().toLowerCase();
+            const notes = $(`#${itemsContainerId}`).children();
+
+            for (let i = 0; i < notes.length; i++) {
+                const n = notes[i].id.toLowerCase().slice(itemsPrefix.length);
+                if (n.indexOf(val) === -1) {
+                    $(`[id=\"${notes[i].id}\"]`).addClass("hidden");
+                }
+                else {
+                    $(`[id=\"${notes[i].id}\"]`).removeClass("hidden");
+                }
+            }
+        });
+    }
 </script>
