@@ -1,234 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('partials/head', { title: "Your account" }); %>
-        <%- include('partials/jsUtils'); %>
-        <script src="/javascripts/userData.js"></script>
-        <!-- jquery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<head>
+    <%- include('partials/head', { title: "Your account" }); %>
+    <%- include('partials/jsUtils'); %>
+    <script src="/javascripts/userData.js"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <script>
-            function initiateLoad() {
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user) {
-                        // User is signed in.
+    <script>
+        function initiateLoad() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
 
-                        // user notes url get
-                        firebase.database().ref('/users/' + user.uid + "/info/notesUrl").once('value').then((snapshot) => {
-                            const data = snapshot.toJSON();
-                            $("#yourNotesUrl").val(data);
-                            loadYourNotes(data);
-                        });
+                    // user notes url get
+                    firebase.database().ref('/users/' + user.uid + "/info/notesGithub").once('value').then((snapshot) => {
+                        const data = snapshot.toJSON();
+                        let gitTreeUrl;
 
-                        const savedNotesDiv = document.getElementById("savedNotes");
-                        const accInf = document.getElementById("accountInfo");
+                        if (data) {
+                            gitTreeUrl = `https://api.github.com/repos/${data}/git/trees/main`;
 
-                        // load account info
-                            accInf.innerHTML = "";
+                            $("#yourNotesUrl").val("github.com/" + data);
+                        }
+                        loadYourNotes(gitTreeUrl);
+                    });
 
-                            // user display name
-                                accInf.appendChild(createParagraph("Username: " + user.displayName, user.displayName));
+                    const savedNotesDiv = document.getElementById("savedNotes");
+                    const accInf = document.getElementById("accountInfo");
 
-                            // user email
-                                accInf.appendChild(createParagraph("e-mail: " + user.email, user.email));
+                    // load account info
+                    accInf.innerHTML = "";
 
-                            // user account creation date
-                                const date = new Date(user.metadata.creationTime);
-                                const dNow = new Date();
-                                let tDelta = dNow - date;
+                    // user display name
+                    accInf.appendChild(createParagraph("Username: " + user.displayName, user.displayName));
 
-                                if (tDelta < 1000 * 60 * 60 * 24) {
-                                    tDelta = "today";
-                                }
-                                else {
-                                    tDelta = `${Math.round((dNow - date)/1000/60/60/24)} days ago`;
-                                }
+                    // user email
+                    accInf.appendChild(createParagraph("e-mail: " + user.email, user.email));
 
-                                accInf.appendChild(createParagraph(`Account created: ${tDelta}`, user.metadata.creationTime));
+                    // user account creation date
+                    const date = new Date(user.metadata.creationTime);
+                    const dNow = new Date();
+                    let tDelta = dNow - date;
 
-                            // user id
-                                const uid_ = document.createElement("span");
-                                uid_.classList.add("spoiler");  // TODO: add some kind of spoiler
-                                uid_.innerText = user.uid;
+                    if (tDelta < 1000 * 60 * 60 * 24) {
+                        tDelta = "today";
+                    } else {
+                        tDelta = `${Math.round((dNow - date) / 1000 / 60 / 60 / 24)} days ago`;
+                    }
 
-                                const p_ = createParagraph(`User ID: `);
-                                p_.appendChild(uid_);
+                    accInf.appendChild(createParagraph(`Account created: ${tDelta}`, user.metadata.creationTime));
 
-                                accInf.appendChild(p_);
+                    // user id
+                    const uid_ = document.createElement("a");
+                    uid_.classList.add("spoiler");  // TODO: add some kind of spoiler
+                    uid_.innerText = user.uid;
+                    uid_.href = `/user/${user.uid}`;
 
-                        // load saved notes
-                            getSavedNotes(user.uid).then(res => res.json()).then(data => {
-                                savedNotesDiv.innerHTML = "";
+                    const p_ = createParagraph(`User ID: `);
+                    p_.appendChild(uid_);
 
-                                if (data[0]) {
-                                    $("#savedNoteSearch").removeClass("hidden");
+                    accInf.appendChild(p_);
 
-                                    data.forEach(e => {
-                                        let a = document.createElement("a");
-                                        let p = document.createElement("p");
+                    // load saved notes TODO: change to firebase db
+                    getSavedNotes(user.uid).then(res => res.json()).then(data => {
+                        savedNotesDiv.innerHTML = "";
 
-                                        a.innerText = e.replace(/-/g, " ");
-                                        a.href = "/note/" + e;
-                                        a.classList.value = "hover:underline hover:font-bold text-md";
+                        if (data[0]) {
+                            $("#savedNoteSearch").removeClass("hidden");
 
-                                        p.appendChild(a);
-                                        p.id = "s-" + e;
+                            data.forEach(e => {
+                                let a = document.createElement("a");
+                                let p = document.createElement("p");
 
-                                        savedNotesDiv.appendChild(p);
-                                    });
-                                }
-                                else {
-                                    savedNotesDiv.appendChild(createParagraph("No saved notes D:"));
-                                }
+                                e = e.split("/");
+                                const nUser = e[0];
+                                const nId = e[1];
+
+                                a.innerText = nId.replace(/-/g, " ");
+                                a.href = "/note/" + nUser + "/" + nId;
+                                a.classList.value = "hover:underline hover:font-bold text-md";
+
+                                p.appendChild(a);
+                                p.id = "s-" + nId;
+
+                                savedNotesDiv.appendChild(p);
                             });
+                        } else {
+                            savedNotesDiv.appendChild(createParagraph("No saved notes D:"));
+                        }
+                    });
 
-                        // delete account button
-                            document.getElementById("deleteAccount").onclick = function () {
-                                firebase.auth().currentUser.getIdToken().then(function(idToken) {
-                                    if (confirm("Are you sure you want to delete your account?") === true) {
-                                        deleteAccount(idToken).then(res => res.json()).then(data => {
-                                                console.log(data);
+                    // delete account button
+                    document.getElementById("deleteAccount").onclick = function () {
+                        firebase.auth().currentUser.getIdToken().then(function (idToken) {
+                            if (confirm("Are you sure you want to delete your account?") === true) {
+                                deleteAccount(idToken).then(res => res.json()).then(data => {
+                                    console.log(data);
 
-                                                alert("Your account has been deleted");
-                                                window.location='/';
-                                        });
-                                    }
+                                    alert("Your account has been deleted");
+                                    window.location = '/';
                                 });
-                            };
-                    }
-                    else {
-                        // User is signed out.
-                        window.location='/login';
-                    }
-                }, function(error) {
-                    console.log(error);
-                });
-
-                document.querySelector("#saveNotesUrl").onclick = function () {
-                    const val = document.querySelector("#yourNotesUrl").value;
-                    if (!isValidURL(val) && val) {
-                        alert("Not a valid url");  // TODO: change to a prettier alert
-                        return
-                    }
-
-                    loadYourNotes(val);
-
-                    const updates = {"notesUrl": val};
-                    firebase.database().ref(`users/${firebase.auth().currentUser.uid}/info`).update(updates);
-                };
-                function loadYourNotes(url) {
-                    if (url) {
-                        $("#yourNotesList").show();
-                        $.getJSON(url, function (result) {
-                            const yourNotes = result["tree"];
-                            const crN = $("#yourNotes");
-
-                            crN.html("");
-                            if (yourNotes.length < 1) {
-                                $("#yourNotesList").hide();
-                            }
-                            else {
-                                for (let i = 0; i < yourNotes.length; i++) {
-                                    const n = yourNotes[i]["path"].split(".md")[0];
-
-                                    crN.append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${n}\">${n}</a></p>`);
-                                }
                             }
                         });
-                    }
-                    else {
-                        $("#yourNotesList").hide();
-                    }
+                    };
+                } else {
+                    // User is signed out.
+                    window.location = '/login';
+                }
+            }, function (error) {
+                console.log(error);
+            });
+
+            document.querySelector("#saveNotesUrl").onclick = function () {
+                const val = document.querySelector("#yourNotesUrl").value;
+                if (!isValidURL(val) && val && !val.includes("github.com/")) {
+                    alert("Not a valid github url");  // TODO: change to a prettier alert
+                    return
                 }
 
-                // search
-                addSearchById("savedSearch", "savedNotes", "s-");
-                addSearchById("yourSearch", "yourNotes", "c-");
+                const regex = new RegExp(/github.com\/(.*)\/(.*)/g);
+                let githubRepo = regex.exec(val);
+                githubRepo = githubRepo[1] + "/" + githubRepo[2];
+
+                const gitTreeUrl = `https://api.github.com/repos/${githubRepo}/git/trees/main`;
+                // const gitRawUrl = `https://raw.githubusercontent.com/${githubRepo}/main/`;
+
+                loadYourNotes(gitTreeUrl);
+                document.querySelector("#yourNotesUrl").value = "github.com/" + githubRepo;
+
+                const updates = {"notesGithub": githubRepo};
+                firebase.database().ref(`users/${firebase.auth().currentUser.uid}/info`).update(updates);
+            };
+
+            function loadYourNotes(url) {
+                if (url) {
+                    $("#yourNotesList").show();
+                    $.getJSON(url, function (result) {
+                        const yourNotes = result["tree"];
+                        const crN = $("#yourNotes");
+
+                        crN.html("");
+                        if (yourNotes.length < 1) {
+                            $("#yourNotesList").hide();
+                        } else {
+                            for (let i = 0; i < yourNotes.length; i++) {
+                                const n = yourNotes[i]["path"].split(".md")[0];
+
+                                crN.append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${firebase.auth().currentUser.uid}/${n}\">${n}</a></p>`);
+                            }
+                        }
+                    });
+                } else {
+                    $("#yourNotesList").hide();
+                }
             }
-        </script>
-    </head>
-    <body onload="initiateLoad()">
-        <div id="content">
 
-            <div class="mb-12">
-                <%- include('partials/topBar'); %>
+            // search
+            addSearchById("savedSearch", "savedNotes", "s-");
+            addSearchById("yourSearch", "yourNotes", "c-");
+        }
+    </script>
+</head>
+<body onload="initiateLoad()">
+<div id="content">
+
+    <div class="mb-12">
+        <%- include('partials/topBar'); %>
+    </div>
+
+    <div class="flex flex-wrap justify-center">
+
+        <div class="infoElement !px-0 transition-all duration-200 !bg-dark-button-color hover:bg-dark-button-color"
+             id="savedNotesContainer">
+            <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
+                onclick="$('#savedNotesContent').toggle(); $('#savedNotesContainer').toggleClass('!bg-dark-button-color');">
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                </svg>
+                Saved notes
+            </h2>
+
+            <div id="savedNotesContent" class="px-6 md:px-20">
+                <div id="savedNoteSearch" class="flex items-center hidden">
+                    <input id="savedSearch" type="text" placeholder="Search..."
+                           class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                    <label for="savedSearch">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </label>
+                </div>
+                <div id="savedNotes">
+                    <p>Loading...</p>
+                </div>
             </div>
+        </div>
 
-            <div class="flex flex-wrap justify-center">
+        <div class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color" id="yourNotesContainer">
+            <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
+                onclick="$('#yourNotesContent').toggle(); $('#yourNotesContainer').toggleClass('!bg-dark-button-color');">
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+                Your notes
+            </h2>
 
-                <div class="infoElement !px-0 transition-all duration-200 !bg-dark-button-color hover:bg-dark-button-color" id="savedNotesContainer">
-                    <h2 class="text-2xl px-6 md:px-20 my-0 py-3" onclick="$('#savedNotesContent').toggle(); $('#savedNotesContainer').toggleClass('!bg-dark-button-color');">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                        </svg>
-                        Saved notes
-                    </h2>
-
-                    <div id="savedNotesContent" class="px-6 md:px-20">
-                        <div id="savedNoteSearch" class="flex items-center hidden">
-                            <input id="savedSearch" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
-                            <label for="savedSearch">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                            </label>
-                        </div>
-                        <div id="savedNotes">
-                            <p>Loading...</p>
-                        </div>
-                    </div>
+            <div id="yourNotesContent" class="hidden px-6 md:px-20">
+                <div class="flex mb-2">
+                    <input id="yourNotesUrl" type="text" placeholder="Your notes github repo url"
+                           class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                    <button class="ml-2 bg-green-button-color" id="saveNotesUrl">Save</button>
                 </div>
 
-                <div class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color" id="yourNotesContainer">
-                    <h2 class="text-2xl px-6 md:px-20 my-0 py-3" onclick="$('#yourNotesContent').toggle(); $('#yourNotesContainer').toggleClass('!bg-dark-button-color');">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        Your notes
-                    </h2>
-
-                    <div id="yourNotesContent" class="hidden px-6 md:px-20">
-                        <div class="flex mb-2">
-                            <input id="yourNotesUrl" type="text" placeholder="Your notes github repo url" class="text-gray-700 px-3 py-2 w-full rounded-xl">
-                            <button class="ml-2 bg-green-button-color" id="saveNotesUrl">Save</button>
-                        </div>
-
-                        <div id="yourNotesList">
-                            <div id="yourNoteSearch" class="flex items-center">
-                                <input id="yourSearch" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
-                                <label for="savedSearch">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </label>
-                            </div>
-                            <div id="yourNotes">
-                                <p>Loading...</p>
-                            </div>
-                        </div>
+                <div id="yourNotesList">
+                    <div id="yourNoteSearch" class="flex items-center">
+                        <input id="yourSearch" type="text" placeholder="Search..."
+                               class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                        <label for="savedSearch">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </label>
                     </div>
-                </div>
-
-                <div class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color" id="accountInfoContainer">
-                    <h2 class="text-2xl px-6 md:px-20 my-0 py-3" onclick="$('#accountInfo').toggle(); $('#accountInfoContainer').toggleClass('!bg-dark-button-color');">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-                        </svg>
-                        Account Info
-                    </h2>
-
-                    <div id="accountInfo" class="px-6 md:px-20 hidden">
+                    <div id="yourNotes">
                         <p>Loading...</p>
                     </div>
                 </div>
-
-                <button class="bg-red-500" id="deleteAccount">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" />
-                    </svg>
-                    Delete account
-                </button>
             </div>
         </div>
-    </body>
+
+        <div class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color" id="accountInfoContainer">
+            <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
+                onclick="$('#accountInfo').toggle(); $('#accountInfoContainer').toggleClass('!bg-dark-button-color');">
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
+                </svg>
+                Account Info
+            </h2>
+
+            <div id="accountInfo" class="px-6 md:px-20 hidden">
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <button class="bg-red-500" id="deleteAccount">
+            <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-5 w-5" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6"/>
+            </svg>
+            Delete account
+        </button>
+    </div>
+</div>
+</body>
 </html>

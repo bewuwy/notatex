@@ -1,61 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('partials/head', { title: user }); %>
-        <script src="/javascripts/userData.js"></script>
+<head>
+    <%- include('partials/head', { title: user }); %>
+    <script src="/javascripts/userData.js"></script>
 
-        <!-- jquery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <script>
-            window.addEventListener("load", function () {
+    <script>
+        window.addEventListener("load", function () {
 
-                addSearchById("search", "user-notes");
-            });
-        </script>
-    </head>
-    <body>
-        <div id="content">
+            addSearchById("search", "user-notes");
+        });
+    </script>
+</head>
+<body>
+<div id="content">
 
-            <div class="mb-12">
-                <%- include('partials/topBar'); %>
-            </div>
+    <div class="mb-12">
+        <%- include('partials/topBar'); %>
+    </div>
 
-            <div class="flex flex-wrap mb-4">
-                <div class="w-full basis-full flex flex-nowrap items-baseline">
-                    <span class="text-4xl font-bold"><%= user %></span>
-                    <% if (verified) { %>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        <title><%= user %> is a verified user, you can sort of trust his notes</title>
-                    </svg>
-                    <% } %>
-                </div>
-                <p class="mt-0">Account created: <%= created %></p>
-            </div>
-
-            <div class="infoElement">
-                <h3><%= user %>'s notes:</h3>
-
-                <% if (noteList.length > 0) { %>
-                <div id="noteSearch" class="flex items-center">
-                    <input id="search" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
-                    <label for="search">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </label>
-                </div>
-                <div id="user-notes">
-                    <% for (var i = 0; i < noteList.length; i++) { %>
-                    <p id="<%= noteList[i] %>"><a href="/note/<%= noteList[i] %>"><%= noteList[i] %></a></p>
-                    <% } %>
-                </div>
-                <% } else { %>
-                <p>This user haven't created any notes yet.</p>
-                <% } %>
-            </div>
-
+    <div class="flex flex-wrap mb-4">
+        <div class="w-full basis-full flex flex-nowrap items-baseline">
+            <span class="text-4xl font-bold"><%= user %></span>
+            <% if (verified) { %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-7 w-7" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <title><%= user %> is a verified user, you can sort of trust his notes</title>
+            </svg>
+            <% } %>
         </div>
-    </body>
+        <p class="mt-0">Account created: <%= created %></p>
+    </div>
+
+    <div class="infoElement">
+        <h3><%= user %>'s notes:</h3>
+
+        <% if (noteList.length > 0) { %>
+        <div id="noteSearch" class="flex items-center">
+            <input id="search" type="text" placeholder="Search..." class="text-gray-700 px-3 py-2 w-full rounded-xl">
+            <label for="search">
+                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-7 w-auto" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </label>
+        </div>
+        <div id="user-notes">
+            <% for (var i = 0; i < noteList.length; i++) { %>
+            <p id="<%= noteList[i] %>"><a href="/note/<%= uid %>/<%= noteList[i] %>"><%= noteList[i] %></a></p>
+            <% } %>
+        </div>
+        <% } else { %>
+        <p>This user haven't created any notes yet.</p>
+        <% } %>
+    </div>
+
+</div>
+</body>
 </html>

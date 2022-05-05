@@ -4,6 +4,8 @@
 // TODO: api to add own notes
 // TODO: optimize API code
 
+const customRender = require("./customRender");
+
 const express = require('express');
 const path = require('path');
 
@@ -12,10 +14,10 @@ const logger = require('morgan');
 
 const axios = require('axios');
 
-const { Remarkable } = require('remarkable');
+const {Remarkable} = require('remarkable');
 
 const createDOMPurify = require('dompurify');
-const { JSDOM } = require('jsdom');
+const {JSDOM} = require('jsdom');
 const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
 
@@ -28,7 +30,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -37,14 +39,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.locals.themes = {
     "default": {"name": "Default theme"},
     "minimalist": {"class": "theme-minimalist", "source": "kepano/obsidian-minimal", "name": "Minimalist dark"},
-    "primary": {"class": "theme-primary", "source": "ceciliamay/obsidianmd-theme-primary", "name": "Primary",
-        "fonts": ["https://fonts.googleapis.com/css2?family=Karla:wght@600&display=swap"]},
+    "primary": {
+        "class": "theme-primary", "source": "ceciliamay/obsidianmd-theme-primary", "name": "Primary",
+        "fonts": ["https://fonts.googleapis.com/css2?family=Karla:wght@600&display=swap"]
+    },
 }
 
 // firebase admin setup
 const admin = require('firebase-admin');
-const { getDatabase } = require('firebase-admin/database');
-const { getAuth } = require("firebase-admin/auth");
+const {getDatabase} = require('firebase-admin/database');
+const {getAuth} = require("firebase-admin/auth");
 const serviceAccount = process.env.FIREBASE_PRIVATE;
 
 admin.initializeApp({
@@ -53,8 +57,8 @@ admin.initializeApp({
 });
 
 
-function renderView(req, res, view, args={}, code=200) {
-    let defArgs = { "theme": req.cookies.theme || "default" };
+function renderView(req, res, view, args = {}, code = 200) {
+    let defArgs = {"theme": req.cookies.theme || "default"};
 
     for (const key in args) {
         defArgs[key] = args[key];
@@ -103,105 +107,105 @@ app.get("/settings", (req, res) => {
 
 
 // notes
-app.get('/note/:title', (req, res) => {
-  // get note from github repo
-  axios
-      .get(`https://raw.githubusercontent.com/bewu-ib/digital-garden/master/_notes/${req.params["title"]}.md`)
-      .then(aRes => {
-          let note = DOMPurify.sanitize(aRes.data.toString());
-          const md = new Remarkable({html: true, breaks: true});
+app.get('/note/:uid/:nid', (req, res) => {
+    const userId = req.params["uid"];
+    const noteId = req.params["nid"];
 
-          // ad-notes with titles
-          note = note.replace(/```ad-([\w\-]+)(?:.*|\n*)title:(.*)((?:.|\n)*?)```/g,
-              '<div class="$1-block rounded-2xl px-4 pb-2 pt-0.5 my-3 bg-gray-900">' +
-              '<p class="b-title">' +
-              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pen hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">\n' +
-              '  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />\n' +
-              '</svg>' +
-              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fire hidden" viewBox="0 0 20 20" fill="currentColor">\n' +
-              '  <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />\n' +
-              '</svg>' +
-              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 info hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">\n' +
-              '  <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />\n' +
-              '</svg>' +
-              '$2</p>' +
-              '\n\n$3' +
-              '</div>');
+    const db = getDatabase();
+    const ref = db.ref("/users/" + userId + "/info");
+    let gitRawUrl;
 
-          // ad-notes without titles
-          note = note.replace(/```ad-([\w\-]+)((?:.|\n)*?)```/g,
-              '<div class="$1-block rounded-2xl px-4 pb-2 pt-0.5 my-3 bg-gray-900">' +
-              '<p class="b-title">' +
-              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pen hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">\n' +
-              '  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />\n' +
-              '</svg>' +
-              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fire hidden" viewBox="0 0 20 20" fill="currentColor">\n' +
-              '  <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd" />\n' +
-              '</svg>' +
-              '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 info hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">\n' +
-              '  <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />\n' +
-              '</svg>' +
-              'Note</p>' +
-              '\n\n$2' +
-              '</div>');
+    ref.once("value", snapshot => {
+        let data = snapshot.toJSON();
 
-          note = md.render(note);
-          note = DOMPurify.sanitize(note);
+        if (data) {
+            gitRawUrl = `https://raw.githubusercontent.com/${data["notesGithub"]}/main/${noteId}.md`;
+        }
+        else {
+            return renderView(req, res, "404", {}, 404);
+        }
+    }).then(() => {
+        // get note from github repo
+        if (gitRawUrl) {
+            axios.get(gitRawUrl)
+                .then(aRes => {
+                    let note = DOMPurify.sanitize(aRes.data.toString());
+                    const md = new Remarkable({html: true, breaks: true});
 
-          let title = req.params["title"];
-          title = title.toString().replace(/-/g, " ");
+                    note = customRender.renderAdNotes(note);
+                    note = md.render(note);
+                    note = DOMPurify.sanitize(note);
 
-          renderView(req, res, "note", {"title": title, "content": note});
-      })
-      .catch(error => {
-          console.log(error);
+                    const title = noteId.toString().replace(/-/g, " ");
 
-          if (error.response.status === 404) {
-              res.status(404).send('Bruh... 404...<br>' + req.url + " not found");
-          }
-          else {
-              console.error(error);
-              res.send(error.toString());
-          }
-  });
+                    return  renderView(req, res, "note", {"title": title, "content": note});
+                })
+                .catch(error => {
+                    console.log(error);
+
+                    if (error.response.status === 404) {
+                        return renderView(req, res, "404", {}, 404);
+                    } else {
+                        console.error(error);
+                        return res.send("Server error");  // res.send(error.toString());
+                    }
+                });
+        }
+    });
 });
 
 
 // user
 app.get("/user/:user", (req, res) => {
     // TODO: custom URLs like /user/bewu
+    const userId = req.params["user"];
     const db = getDatabase();
-    const userRef = db.ref("users").child(req.params["user"]);
+    const userRef = db.ref("users").child(userId);
 
-    let user;
+    let userName;
     let created;
 
-    getAuth().getUser(req.params["user"]).then(userRecord => {
+    getAuth().getUser(userId).then(userRecord => {
         // console.log(userRecord);
 
-        user = userRecord.displayName;
+        userName = userRecord.displayName;
         created = new Date(userRecord.metadata.creationTime);
-        created = `${created.getDate()}/${created.getMonth()+1}/${created.getFullYear()}`;
+        created = `${created.getDate()}/${created.getMonth() + 1}/${created.getFullYear()}`;
 
-        let userData;
+        let userInfo;
         let notesList;
 
-        userRef.once("value", snapshot => {
-            userData = snapshot.toJSON();
-            notesList = userData["info"]["notesUrl"];
+        userRef.child("/info").once("value", snapshot => {
+            userInfo = snapshot.toJSON();
+
+            if (userInfo && userInfo["notesGithub"]) {
+                notesList = `https://api.github.com/repos/${userInfo["notesGithub"]}/git/trees/main`;
+            }
         }).then(() => {
             let verified = false;
-            if (userData && userData.info) {
-                verified = userData.info.verified;
+            if (userInfo) {
+                verified = userInfo.verified;
             }
 
-            axios.get(notesList).catch(function (error) {
+            function empty() {
                 return renderView(req, res, "user",
-                    {"user": user, "verified": verified, "created": created, "noteList": []});
+                    {"uid": userId, "user": userName, "verified": verified, "created": created, "noteList": []});
+            }
+
+            if (!notesList) {
+                return empty();
+            }
+            axios.get(notesList).catch(function (error) {
+                if (error.response.status === 404) {
+                    return empty();
+                }
+                else {
+                    console.error(error);
+                    return res.send(`Server error ${error.response.status}`);
+                }
             }).then(r => {
-                if (!r || !"tree" in r.data) {
-                    return renderView(req, res, "user",
-                        {"user": user, "verified": verified, "created": created, "noteList": []});
+                if (!r || !r.data || !r.data["tree"]) {
+                    return empty();
                 }
 
                 let noteList = [];
@@ -210,23 +214,22 @@ app.get("/user/:user", (req, res) => {
                     noteList.push(n);
                 }
 
-                return renderView(req, res, "user", {"user": user, "verified": verified, "created": created,
-                    "noteList": noteList});
+                return renderView(req, res, "user", {
+                    "uid": userId, "user": userName, "verified": verified, "created": created, "noteList": noteList
+                });
             });
         });
     }).catch(e => {
-        user = "User not found";
         console.log(e);
-
-        return renderView(req, res, "404");
+        return renderView(req, res, "404", {}, 404);
     });
 });
 
 
 // api/saveNote (user token, note id)
 app.post("/api/saveNote", (req, res) => {
-   const userToken = req.body.userToken;
-   const noteId = req.body.note;
+    const userToken = req.body.userToken;
+    const noteId = req.body.note;
 
     if (typeof userToken == "undefined" || typeof noteId == "undefined") {
         return res.status(400).send({"Error": "Missing user token and note id in request body"});
@@ -295,8 +298,7 @@ app.post("/api/savedNotes", (req, res) => {
             });
 
             return res.send(savedValues);
-        }
-        else {
+        } else {
             return res.send([null]);
         }
 
@@ -332,8 +334,8 @@ app.post("/api/deleteAccount", (req, res) => {
 });
 
 // catch 404
-app.use(function(req, res) {
-  res.status(404).send('Bruh... 404...<br>' + req.url + " not found");
+app.use(function (req, res) {
+    return renderView(req, res, "404", {}, 404);
 });
 
 module.exports = app;
