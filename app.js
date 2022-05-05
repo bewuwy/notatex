@@ -114,43 +114,47 @@ app.get('/note/:uid/:nid', (req, res) => {
     const db = getDatabase();
     const ref = db.ref("/users/" + userId + "/info");
     let gitRawUrl;
+    let userName;
 
-    ref.once("value", snapshot => {
-        let data = snapshot.toJSON();
+    getAuth().getUser(userId).then(userRecord => {
+        userName = userRecord.displayName;
 
-        if (data) {
-            gitRawUrl = `https://raw.githubusercontent.com/${data["notesGithub"]}/main/${noteId}.md`;
-        }
-        else {
-            return renderView(req, res, "404", {}, 404);
-        }
-    }).then(() => {
-        // get note from github repo
-        if (gitRawUrl) {
-            axios.get(gitRawUrl)
-                .then(aRes => {
-                    let note = DOMPurify.sanitize(aRes.data.toString());
-                    const md = new Remarkable({html: true, breaks: true});
+        ref.once("value", snapshot => {
+            let data = snapshot.toJSON();
 
-                    note = customRender.renderAdNotes(note);
-                    note = md.render(note);
-                    note = DOMPurify.sanitize(note);
+            if (data) {
+                gitRawUrl = `https://raw.githubusercontent.com/${data["notesGithub"]}/main/${noteId}.md`;
+            } else {
+                return renderView(req, res, "404", {}, 404);
+            }
+        }).then(() => {
+            // get note from github repo
+            if (gitRawUrl) {
+                axios.get(gitRawUrl)
+                    .then(aRes => {
+                        let note = DOMPurify.sanitize(aRes.data.toString());
+                        const md = new Remarkable({html: true, breaks: true});
 
-                    const title = noteId.toString().replace(/-/g, " ");
+                        note = customRender.renderAdNotes(note);
+                        note = md.render(note);
+                        note = DOMPurify.sanitize(note);
 
-                    return  renderView(req, res, "note", {"title": title, "content": note});
-                })
-                .catch(error => {
-                    console.log(error);
+                        const title = noteId.toString().replace(/-/g, " ");
 
-                    if (error.response.status === 404) {
-                        return renderView(req, res, "404", {}, 404);
-                    } else {
-                        console.error(error);
-                        return res.send("Server error");  // res.send(error.toString());
-                    }
-                });
-        }
+                        return renderView(req, res, "note", {"title": title, "userName": userName, "content": note});
+                    })
+                    .catch(error => {
+                        console.log(error);
+
+                        if (error.response.status === 404) {
+                            return renderView(req, res, "404", {}, 404);
+                        } else {
+                            console.error(error);
+                            return res.send("Server error");  // res.send(error.toString());
+                        }
+                    });
+            }
+        });
     });
 });
 
@@ -198,8 +202,7 @@ app.get("/user/:user", (req, res) => {
             axios.get(notesList).catch(function (error) {
                 if (error.response.status === 404) {
                     return empty();
-                }
-                else {
+                } else {
                     console.error(error);
                     return res.send(`Server error ${error.response.status}`);
                 }
