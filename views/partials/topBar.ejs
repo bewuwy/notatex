@@ -44,3 +44,8 @@
         </div>
     </div>
 </div>
+
+<!-- changelog popup -->
+<% if (locals.popup) { %>
+    <%- include('popup', {"title": popup["title"], "subtitle": popup["sub"], "content": popup["content"]}); %>
+<% } %>
