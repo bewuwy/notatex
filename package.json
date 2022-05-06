@@ -1,6 +1,6 @@
 {
   "name": "notatex",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -23,7 +23,5 @@
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.3.1",
     "tailwindcss": "^3.0.23"
-  },
-  "keywords": [],
-  "description": ""
+  }
 }
