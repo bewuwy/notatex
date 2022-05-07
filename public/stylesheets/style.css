@@ -233,7 +233,7 @@ h6 {
 
 /* popup */
 .popup-content ul {
-	@apply list-disc;
+	@apply list-disc ml-4;
 }
 .popup-content h1 {
 	@apply mb-0;
