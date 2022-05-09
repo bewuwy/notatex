@@ -937,6 +937,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   overflow: scroll;
 }
 
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1781,6 +1785,10 @@ body {
 
 .popup-content h1 {
   margin-bottom: 0px;
+}
+
+.hover\:overflow-y-scroll:hover {
+  overflow-y: scroll;
 }
 
 .hover\:bg-dark-button-color:hover {
