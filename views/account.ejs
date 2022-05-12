@@ -14,14 +14,20 @@
                     // User is signed in.
 
                     // user notes url get
-                    firebase.database().ref('/users/' + user.uid + "/info/notesGithub").once('value').then((snapshot) => {
+                    firebase.database().ref('/users/' + user.uid + "/info").once('value').then((snapshot) => {
                         const data = snapshot.toJSON();
                         let gitTreeUrl;
+                        let customID;
 
                         if (data) {
-                            gitTreeUrl = `https://api.github.com/repos/${data}/git/trees/main`;
-
-                            $("#yourNotesUrl").val("github.com/" + data);
+                            if (data["notesGithub"]) {
+                                gitTreeUrl = `https://api.github.com/repos/${data["notesGithub"]}/git/trees/main`;
+                                $("#yourNotesUrl").val("github.com/" + data);
+                            }
+                            if (data["customID"]) {
+                                customID = data["customID"];
+                                $("#customID").val(customID);
+                            }
                         }
                         loadYourNotes(gitTreeUrl);
                     });
@@ -53,7 +59,7 @@
 
                     // user id
                     const uid_ = document.createElement("a");
-                    uid_.classList.add("spoiler");  // TODO: add some kind of spoiler
+                    uid_.classList.add("spoiler");
                     uid_.innerText = user.uid;
                     uid_.href = `/user/${user.uid}`;
 
@@ -92,7 +98,7 @@
                     });
 
                     // delete account button
-                    document.getElementById("deleteAccount").onclick = function () {
+                    document.querySelector("#deleteAccount").onclick = function () {
                         firebase.auth().currentUser.getIdToken().then(function (idToken) {
                             if (confirm("Are you sure you want to delete your account?") === true) {
                                 deleteAccount(idToken).then(res => res.json()).then(data => {
@@ -131,6 +137,25 @@
 
                 const updates = {"notesGithub": githubRepo};
                 firebase.database().ref(`users/${firebase.auth().currentUser.uid}/info`).update(updates);
+            };
+
+            document.querySelector("#customIDBtn").onclick = function() {
+                const val = document.querySelector("#customID").value;
+
+                firebase.auth().currentUser.getIdToken().then(function (idToken) {
+                    fetch("/api/setCustomId", {
+                        method: "POST",
+                        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+                        body: JSON.stringify({ userToken: idToken, customID: val })}
+                    ).then(r => r.json()).then(data => {
+                        if (!data.Error) {
+                            alert("Changed your custom user ID");
+                        }
+                        else {
+                            alert(data.Error);
+                        }
+                    });
+                });
             };
 
             function loadYourNotes(url) {
@@ -234,6 +259,28 @@
                     <div id="yourNotes">
                         <p>Loading...</p>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="accountSettingsContainer"
+             class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color">
+            <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
+                onclick="$('#accountSettings').toggle(); $('#accountSettingsContainer').toggleClass('!bg-dark-button-color');">
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Account Settings
+            </h2>
+
+            <div id="accountSettings" class="px-6 md:px-20 hidden">
+                <div class="flex mb-2">
+                    <input id="customID" type="text" placeholder="Your custom user ID (must be unique)"
+                           class="text-gray-700 px-3 py-2 w-full rounded-xl">
+                    <button class="ml-2 bg-green-button-color" id="customIDBtn">Save</button>
                 </div>
             </div>
         </div>
