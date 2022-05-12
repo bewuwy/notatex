@@ -9,10 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Custom IDs!**
-- On-site changelog popup
-- ad-quote block
-
 ### Changed
 
 ### Deprecated
@@ -22,6 +18,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+## [0.2.0] - 2022-5-12
+
+2nd release -> shorter links thanks to custom UIDs
+
+### Added
+
+- **Custom IDs!**
+  - New setting on account page.
+- On-site changelog popup
+- Quote block
+
+### Changed
+
+- Theme settings icon in top bar.
+- Some bad code to a little less bad one.
 
 ## [0.1.0] - 2022-5-5
 
