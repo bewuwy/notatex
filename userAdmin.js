@@ -12,7 +12,7 @@ module.exports = {
 
                 if (data) { uid = data; }
             }).then(r => {
-                getAuth().getUser(uid)
+                getAuth().getUser(uid).catch(e => resolve(null))
                     .then((userRecord) => {
                         resolve(userRecord);
                     });

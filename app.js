@@ -179,6 +179,10 @@ app.get("/note/:uid/:nid", (req, res) => {
     const noteId = req.params["nid"];
 
     userAdmin.getUserByID(userId).then((user) => {
+        if (!user) {
+            return renderView(req, res, "404", {}, 404);
+        }
+
         const db = getDatabase();
         const ref = db.ref("/users/" + user.uid + "/info");
 
@@ -236,6 +240,10 @@ app.get("/user/:user", (req, res) => {
     const userId = req.params["user"];
 
     userAdmin.getUserByID(userId).then((user) => {
+        if (!user) {
+            return renderView(req, res, "404", {}, 404);
+        }
+
         const db = getDatabase();
         const userRef = db.ref("users").child(user.uid);
 
