@@ -37,6 +37,7 @@ body {
 	--note-block-color: rgb(96 165 250);
 	--info-block-color: rgb(20 184 166);
 	--hint-block-color: rgb(16 185 129);
+	--quote-block-color: #504c49;
 }
 
 .infoElement {
@@ -211,24 +212,20 @@ h6 {
 #note .note-block .b-title {
 	@apply bg-note-block-color;
 }
-#note .note-block .b-title svg.pen {
-	@apply block;
-}
 
 /* hint/tip block */
 #note > :is(.hint-block, .tip-block) > .b-title {
 	@apply bg-hint-block-color;
-}
-#note > :is(.hint-block, .tip-block) > .b-title > svg.fire {
-	@apply block;
 }
 
 /* info block */
 #note .info-block .b-title {
 	@apply bg-info-block-color;
 }
-#note .info-block .b-title svg.info {
-	@apply block;
+
+/* quote block */
+#note .quote-block .b-title {
+	@apply bg-quote-block-color;
 }
 
 /* popup */

@@ -1421,6 +1421,7 @@ body {
   --note-block-color: rgb(96 165 250);
   --info-block-color: rgb(20 184 166);
   --hint-block-color: rgb(16 185 129);
+  --quote-block-color: #504c49;
 }
 
 .infoElement {
@@ -1752,18 +1753,10 @@ body {
   background-color: var(--note-block-color);
 }
 
-#note .note-block .b-title svg.pen {
-  display: block;
-}
-
 /* hint/tip block */
 
 #note > :is(.hint-block, .tip-block) > .b-title {
   background-color: var(--hint-block-color);
-}
-
-#note > :is(.hint-block, .tip-block) > .b-title > svg.fire {
-  display: block;
 }
 
 /* info block */
@@ -1772,8 +1765,10 @@ body {
   background-color: var(--info-block-color);
 }
 
-#note .info-block .b-title svg.info {
-  display: block;
+/* quote block */
+
+#note .quote-block .b-title {
+  background-color: var(--quote-block-color);
 }
 
 /* popup */
@@ -1785,10 +1780,6 @@ body {
 
 .popup-content h1 {
   margin-bottom: 0px;
-}
-
-.hover\:overflow-y-scroll:hover {
-  overflow-y: scroll;
 }
 
 .hover\:bg-dark-button-color:hover {
