@@ -139,6 +139,7 @@
                 firebase.database().ref(`users/${firebase.auth().currentUser.uid}/info`).update(updates);
             };
 
+            // save custom UID
             document.querySelector("#customIDBtn").onclick = function() {
                 const val = document.querySelector("#customID").value;
 
@@ -238,12 +239,6 @@
             </h2>
 
             <div id="yourNotesContent" class="hidden px-6 md:px-20">
-                <div class="flex mb-2">
-                    <input id="yourNotesUrl" type="text" placeholder="Your notes github repo url"
-                           class="text-gray-700 px-3 py-2 w-full rounded-xl">
-                    <button class="ml-2 bg-green-button-color" id="saveNotesUrl">Save</button>
-                </div>
-
                 <div id="yourNotesList">
                     <div id="yourNoteSearch" class="flex items-center">
                         <input id="yourSearch" type="text" placeholder="Search..."
@@ -277,10 +272,18 @@
             </h2>
 
             <div id="accountSettings" class="px-6 md:px-20 hidden">
-                <div class="flex mb-2">
+                <div class="flex flex-wrap mb-2">
+                    <label for="customID" class="w-full whitespace-nowrap my-auto ml-1 mr-2">Custom UID:</label>
                     <input id="customID" type="text" placeholder="Your custom user ID (must be unique)"
-                           class="text-gray-700 px-3 py-2 w-full rounded-xl">
-                    <button class="ml-2 bg-green-button-color" id="customIDBtn">Save</button>
+                           class="text-gray-700 px-3 py-2 mr-1 w-auto flex-grow rounded-xl">
+                    <button class="bg-green-button-color" id="customIDBtn">Save</button>
+                </div>
+
+                <div class="flex flex-wrap mb-2">
+                    <label for="yourNotesUrl" class="w-full whitespace-nowrap my-auto ml-1 mr-2">Your notes GitHub url:</label>
+                    <input id="yourNotesUrl" type="text" placeholder="Your notes GitHub repository url"
+                           class="text-gray-700 px-3 py-2 mr-1 w-auto flex-grow rounded-xl">
+                    <button class="bg-green-button-color" id="saveNotesUrl">Save</button>
                 </div>
             </div>
         </div>
