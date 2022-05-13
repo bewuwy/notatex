@@ -22,7 +22,7 @@
                         if (data) {
                             if (data["notesGithub"]) {
                                 gitTreeUrl = `https://api.github.com/repos/${data["notesGithub"]}/git/trees/main`;
-                                $("#yourNotesUrl").val("github.com/" + data);
+                                $("#yourNotesUrl").val("github.com/" + data["notesGithub"]);
                             }
                             if (data["customID"]) {
                                 customID = data["customID"];
