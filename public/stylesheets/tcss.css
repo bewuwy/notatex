@@ -541,6 +541,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   z-index: 10;
 }
 
+.z-50 {
+  z-index: 50;
+}
+
 .float-left {
   float: left;
 }
@@ -615,6 +619,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 4rem;
 }
 
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .mb-12 {
   margin-bottom: 3rem;
 }
@@ -677,6 +686,18 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .ml-3 {
   margin-left: 0.75rem;
+}
+
+.mr-4 {
+  margin-right: 1rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
 }
 
 .box-border {
@@ -917,6 +938,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   align-items: stretch;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -927,6 +952,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .self-center {
   align-self: center;
+}
+
+.justify-self-end {
+  justify-self: end;
 }
 
 .overflow-hidden {
@@ -951,9 +980,17 @@ Ensure the default browser behavior of the `hidden` attribute.
   white-space: normal;
 }
 
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
 .break-normal {
   overflow-wrap: normal;
   word-break: normal;
+}
+
+.break-words {
+  overflow-wrap: break-word;
 }
 
 .rounded-xl {
@@ -1839,6 +1876,10 @@ body {
     width: 50%;
   }
 
+  .md\:w-auto {
+    width: auto;
+  }
+
   .md\:px-20 {
     padding-left: 5rem;
     padding-right: 5rem;
@@ -1847,6 +1888,11 @@ body {
   .md\:px-12 {
     padding-left: 3rem;
     padding-right: 3rem;
+  }
+
+  .md\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .md\:pb-24 {

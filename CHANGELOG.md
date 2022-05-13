@@ -19,6 +19,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+
+## [0.2.1] - 2022-5-13
+
+3rd release, yay!
+
+### Added
+
+- Added ability to remove custom UID
+- Added labels to account settings
+
+### Changed
+
+- Moved your notes url setting to account settings block in account view
+
+### Fixed
+
+- Fixed your notes url loading wrongly into input
+- Fixed popup sometimes showing behind some parts of the webpage
+- Fixed word wrap in popup
+
+
 ## [0.2.0] - 2022-5-12
 
 2nd release -> shorter links thanks to custom UIDs
@@ -34,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Theme settings icon in top bar.
 - Some bad code to a little less bad one.
+
 
 ## [0.1.0] - 2022-5-5
 

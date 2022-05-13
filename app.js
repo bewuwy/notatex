@@ -433,10 +433,20 @@ app.post("/api/setCustomId", (req, res) => {
         .then((user) => {
             const db = getDatabase();
 
+            if (customId === "") {
+                let oldCustom;
+                db.ref(`/users/${user.uid}/info/customID`).once("value", (snapshot) => {
+                    oldCustom = snapshot.toJSON();
+                }).then(r => {
+                    db.ref(`/users/${user.uid}/info/customID`).remove().then(r => db.ref(`/customID/${oldCustom}`).remove());
+                });
+
+                return res.status(200).send({Message: "Success"});
+            }
+
             const idRef = db.ref(`/customID/${customId}`);
             idRef.once("value", (snapshot) => {
                 if (snapshot.toJSON()) {  // if custom id is taken
-
                     e = true;
                     return res.status(400).send({Error: "Custom id taken!"});
                 }
