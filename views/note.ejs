@@ -28,7 +28,7 @@
                     saveNoteText.innerText = "Loading...";
                     saveNoteA.onclick = null;
 
-                    saveNote(noteId, idToken).then(res => res.json()).then(data => {
+                    saveNote(noteId, idToken).then(res => res.json()).then(data => {  // TODO: change to firebase.database();
                         if (data.success) {
                             console.log(data);
 
@@ -47,7 +47,7 @@
                     saveNoteText.innerText = "Loading...";
                     saveNoteA.onclick = null;
 
-                    unsaveNote(noteId, idToken).then(res => res.json()).then(data => {
+                    unsaveNote(noteId, idToken).then(res => res.json()).then(data => {  // TODO: change to firebase.database();
                         if (data.success) {
                             console.log(data);
 
@@ -60,26 +60,45 @@
                 });
             }
 
-            firebase.auth().onAuthStateChanged(function (user) {
-                if (user) {
-                    // signed in
+            function checkNoteSaved(user) {
+                const db = firebase.database();
+                const savedRef = db.ref(`/users/${user.uid}/savedNotes`);
 
-                    // check if note already saved
-                    getSavedNotes(user.uid).then(res => res.json()).then(data => {
+                savedRef.once("value", (data) => {
+                    let savedData = data.val();
+
+                    if (savedData) {
+                        const savedValues = Object.values(savedData);
+
                         // TODO: something better to check if saved than downloading whole list of savedNotes?
-                        if (data.includes(noteId)) {
+                        if (savedValues.includes(noteId)) {
                             // note saved
 
                             saveNoteText.innerText = "Note saved";
                             saveNoteA.classList.value = "text-gray-500";
 
                             saveNoteA.onclick = unsaveNoteClick;
-                        } else {
-                            // note not saved
-
-                            saveNoteA.onclick = saveNoteClick;
+                            return
                         }
-                    });
+                    }
+
+                    // note not saved
+                    saveNoteA.onclick = saveNoteClick;
+                });
+            }
+
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // signed in
+
+                    // check if note already saved
+                    checkNoteSaved(user);
+
+                    // add note to recently viewed
+                    const db = firebase.database();
+                    const recentRef = db.ref(`/users/${user.uid}/recent`);
+
+                    recentRef.set(noteId);
                 } else {
                     // signed out
 

@@ -92,9 +92,7 @@ function renderView(req, res, view, args = {}, code = 200) {
         else {
             // get latest changelog
             axios
-                .get(
-                    "https://api.github.com/repos/bewuwy/notatex/releases/latest"
-                )
+                .get("https://api.github.com/repos/bewuwy/notatex/releases/latest")
                 .catch((e) => {
                     console.error(e);
                     res.send("Server error");
