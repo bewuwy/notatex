@@ -6,10 +6,13 @@
     <script src="/javascripts/userData.js"></script>
 
     <script>
+        let UID = '';
+
         function initiateLoad() {
             firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
                     // User is signed in.
+                    UID = user.uid;
 
                     // user notes url get
                     firebase.database().ref('/users/' + user.uid + "/info").once('value').then((snapshot) => {
@@ -24,6 +27,7 @@
                             }
                             if (data["customID"]) {
                                 customID = data["customID"];
+                                UID = customID;
                                 $("#customID").val(customID);
                             }
                         }
@@ -157,6 +161,7 @@
                 });
             };
 
+            // load "Your Notes"
             function loadYourNotes(url) {
                 if (url) {
                     $("#yourNotesList").show();
@@ -171,7 +176,7 @@
                             for (let i = 0; i < yourNotes.length; i++) {
                                 const n = yourNotes[i]["path"].split(".md")[0];
 
-                                crN.append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${firebase.auth().currentUser.uid}/${n}\">${n}</a></p>`);
+                                crN.append(`<p id=\"c-${n}\"><a class=\"hover:underline hover:font-bold text-md\" href=\"/note/${UID}/${n}\">${n}</a></p>`);
                             }
                         }
                     });

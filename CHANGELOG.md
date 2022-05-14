@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added recently viewed note on home page (synced with the account)
+
 ### Changed
+
+- Links in "Your Notes" use custom UID over the randomly-generated one
 
 ### Deprecated
 
