@@ -1,8 +1,6 @@
 //imports
 
 // TODO: better index page
-// TODO: api to add own notes
-// TODO: optimize API code
 
 const customRender = require("./customRender");
 const userAdmin = require("./userAdmin");
@@ -34,8 +32,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// themes
-// TODO: add more themes
+// themes TODO: add more themes
 app.locals.themes = {
     default: {name: "Default theme"},
     minimalist: {
@@ -92,9 +89,7 @@ function renderView(req, res, view, args = {}, code = 200) {
         else {
             // get latest changelog
             axios
-                .get(
-                    "https://api.github.com/repos/bewuwy/notatex/releases/latest"
-                )
+                .get("https://api.github.com/repos/bewuwy/notatex/releases/latest")
                 .catch((e) => {
                     console.error(e);
                     res.send("Server error");
@@ -143,19 +138,15 @@ app.get("/", (req, res) => {
     const featured_ref = db.ref("global").child("featured");
     let featured;
 
-    // TODO: change getting featured notes to on change from once
-    featured_ref
-        .orderByKey()
-        .once("value", (snapshot) => {
-            let ft_data = snapshot.toJSON();
+    featured_ref.orderByKey().once("value", (snapshot) => {
+        let ft_data = snapshot.toJSON();
 
-            featured = Object.keys(ft_data).map(function (k) {
-                return ft_data[k];
-            });
-        })
-        .then((r) => {
-            renderView(req, res, "index", {featured: featured});
+        featured = Object.keys(ft_data).map(function (k) {
+            return ft_data[k];
         });
+    }).then((r) => {
+        renderView(req, res, "index", {featured: featured});
+    });
 });
 
 // login
@@ -173,7 +164,7 @@ app.get("/settings", (req, res) => {
     renderView(req, res, "settings");
 });
 
-// notes
+// note view
 app.get("/note/:uid/:nid", (req, res) => {
     const userId = req.params["uid"];
     const noteId = req.params["nid"];
@@ -236,7 +227,6 @@ app.get("/note/:uid/:nid", (req, res) => {
 
 // user
 app.get("/user/:user", (req, res) => {
-    // TODO: custom URLs like /user/bewu
     const userId = req.params["user"];
 
     userAdmin.getUserByID(userId).then((user) => {
@@ -319,7 +309,10 @@ app.get("/user/:user", (req, res) => {
     });
 });
 
-// api/saveNote (user token, note id)
+/**
+ * @deprecated since v0.2.2, use firebase.database() instead
+ * api/saveNote (user token, note id)
+ */
 app.post("/api/saveNote", (req, res) => {
     const userToken = req.body.userToken;
     const noteId = req.body.note;
@@ -348,7 +341,10 @@ app.post("/api/saveNote", (req, res) => {
         });
 });
 
-// api/deleteSavedNote (user token, note id)
+/**
+ * @deprecated since v0.2.2, use firebase.database() instead
+ * api/deleteSavedNote (user token, note id)
+ */
 app.post("/api/deleteSavedNote", (req, res) => {
     const userToken = req.body.userToken;
     const noteId = req.body.note;
@@ -401,26 +397,24 @@ app.post("/api/savedNotes", (req, res) => {
     const userRef = usersRef.child(userId);
     const savedRef = userRef.child("savedNotes");
 
-    savedRef
-        .once("value", (data) => {
-            let savedData = data.val();
+    savedRef.once("value", (data) => {
+        let savedData = data.val();
 
-            if (savedData) {
-                const savedValues = Object.keys(savedData).map(function (key) {
-                    return savedData[key];
-                });
+        if (savedData) {
+            const savedValues = Object.keys(savedData).map(function (key) {
+                return savedData[key];
+            });
 
-                return res.send(savedValues);
-            } else {
-                return res.send([null]);
-            }
-        })
-        .catch((e) => {
-            return res.status(400).send({Error: e});
-        });
+            return res.send(savedValues);
+        } else {
+            return res.send([null]);
+        }
+    }).catch((e) => {
+        return res.status(400).send({Error: e});
+    });
 });
 
-// api/setCustomId
+// api/setCustomId (userToken, customId)
 app.post("/api/setCustomId", (req, res) => {
     const userToken = req.body.userToken;
     const customId = req.body.customID;
@@ -451,7 +445,9 @@ app.post("/api/setCustomId", (req, res) => {
                     return res.status(400).send({Error: "Custom id taken!"});
                 }
             }).then(r => {
-                if (e) {return}
+                if (e) {
+                    return
+                }
 
                 const userRef = db.ref(`/users/${user.uid}/info/customID`);
 
@@ -464,13 +460,13 @@ app.post("/api/setCustomId", (req, res) => {
                         }
                     })
                 }).then(r => {
-                        userRef.set(customId).then(r => {
-                            idRef.set(user.uid).then(r => {
-                                return res.status(200).send({Message: "Success"});
-                            });
+                    userRef.set(customId).then(r => {
+                        idRef.set(user.uid).then(r => {
+                            return res.status(200).send({Message: "Success"});
                         });
                     });
                 });
+            });
         });
 });
 

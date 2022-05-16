@@ -5,6 +5,39 @@
 
     <meta name="description"
           content="NotaTex is the best note-taking tool for both making and learning notes on the web.">
+
+    <script>
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // signed in
+
+                const db = firebase.database();
+                const recentRef = db.ref(`/users/${user.uid}/recent`);
+
+                recentRef.on("value", (snapshot) => {
+                    const data = snapshot.toJSON();
+
+                    if (data) {
+                        const author = data.split("/")[0];
+                        const title = data.split("/")[1].replaceAll("-", " ");
+
+                        const recent = $("#recent-notes");
+                        recent.removeClass("hidden");
+
+                        const recentContent = $("#recent-notes-content");
+                        recentContent.empty();
+
+                        recentContent.append(
+                            `<div class=\"feat-note\" onclick=\"window.location='/note/${data}'\">\n` +
+                            `<h4>${title}</h4>\n` +
+                            `<div>Created by ${author}</div>\n` +
+                            "</div>"
+                        );
+                    }
+                });
+            }
+        });
+    </script>
 </head>
 <body>
 <div id="content">
@@ -12,11 +45,17 @@
         <%- include('partials/topBar'); %>
     </div>
 
+    <div id="recent-notes" class="hidden">
+        <h3>Continue reading</h3>
+        <div id="recent-notes-content" class="flex flex-wrap items-stretch"></div>
+    </div>
+
     <div id="featured-notes">
         <h3>Featured notes</h3>
         <div id="featured-notes-content" class="flex flex-wrap items-stretch">
             <% for(var i=0; i < featured.length; i++) { %>
             <div class="feat-note" onclick="window.location=`/note/<%- featured[i]['id'] -%>`">
+                <!-- TODO: change to a href -->
                 <h4><%- featured[i]['title'] -%></h4>
                 <div><%- featured[i]['prev'] -%></div>
             </div>

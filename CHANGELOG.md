@@ -9,9 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added recently viewed note on home page (synced with the account)
+- Added ability to close a popup by clicking outside it
+
 ### Changed
 
+- Links in "Your Notes" use custom UID over the randomly-generated one
+- Note and account view to use firebase database api instead of the custom web one
+- Reversed saved notes in account view, so the more recent ones are on top
+
 ### Deprecated
+
+- *api/saveNote* and *api/deleteSavedNote* web api 
 
 ### Removed
 

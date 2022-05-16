@@ -2,6 +2,9 @@
 
 
 // saved notes functions
+    /**
+     * @deprecated since v0.2.2, use firebase.database() instead
+     */
     function getSavedNotes(uid) {
         return fetch("/api/savedNotes", {
             method: "POST",
@@ -10,6 +13,9 @@
         );
     }
 
+    /**
+     * @deprecated since v0.2.2, use firebase.database() instead
+     */
     function unsaveNote(noteId, userToken) {
         return fetch("/api/deleteSavedNote", {
             method: "POST",
@@ -18,6 +24,9 @@
         );
     }
 
+    /**
+     * @deprecated since v0.2.2, use firebase.database() instead
+     */
     function saveNote(noteId, userToken) {
         return fetch("/api/saveNote", {
             method: "POST",
@@ -32,6 +41,6 @@
         return fetch("/api/deleteAccount", {
             method: "POST",
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            body: JSON.stringify({userToken: userToken })}
+            body: JSON.stringify({userToken: userToken})}
         );
     }
