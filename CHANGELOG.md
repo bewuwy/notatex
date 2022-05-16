@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Links in "Your Notes" use custom UID over the randomly-generated one
-- Note view to use firebase database api instead of the custom web
+- Note and account view to use firebase database api instead of the custom web one
+- Reversed saved notes in account view, so the more recent ones are on top
 
 ### Deprecated
 
