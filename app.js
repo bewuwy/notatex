@@ -1,8 +1,6 @@
 //imports
 
 // TODO: better index page
-// TODO: api to add own notes
-// TODO: optimize API code
 
 const customRender = require("./customRender");
 const userAdmin = require("./userAdmin");
@@ -34,8 +32,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// themes
-// TODO: add more themes
+// themes TODO: add more themes
 app.locals.themes = {
     default: {name: "Default theme"},
     minimalist: {
@@ -141,19 +138,15 @@ app.get("/", (req, res) => {
     const featured_ref = db.ref("global").child("featured");
     let featured;
 
-    // TODO: change getting featured notes to on change from once
-    featured_ref
-        .orderByKey()
-        .once("value", (snapshot) => {
-            let ft_data = snapshot.toJSON();
+    featured_ref.orderByKey().once("value", (snapshot) => {
+        let ft_data = snapshot.toJSON();
 
-            featured = Object.keys(ft_data).map(function (k) {
-                return ft_data[k];
-            });
-        })
-        .then((r) => {
-            renderView(req, res, "index", {featured: featured});
+        featured = Object.keys(ft_data).map(function (k) {
+            return ft_data[k];
         });
+    }).then((r) => {
+        renderView(req, res, "index", {featured: featured});
+    });
 });
 
 // login
@@ -234,7 +227,6 @@ app.get("/note/:uid/:nid", (req, res) => {
 
 // user
 app.get("/user/:user", (req, res) => {
-    // TODO: custom URLs like /user/bewu
     const userId = req.params["user"];
 
     userAdmin.getUserByID(userId).then((user) => {
