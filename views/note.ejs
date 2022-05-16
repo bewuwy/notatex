@@ -22,41 +22,46 @@
 
             const noteId = window.location.toString().split("note/")[1];
 
-            function saveNoteClick() {
+            function saveNoteClick(user) {
                 // save note by id and current user's token
-                firebase.auth().currentUser.getIdToken().then(function (idToken) {
-                    saveNoteText.innerText = "Loading...";
-                    saveNoteA.onclick = null;
 
-                    saveNote(noteId, idToken).then(res => res.json()).then(data => {  // TODO: change to firebase.database();
-                        if (data.success) {
-                            console.log(data);
+                saveNoteText.innerText = "Loading...";
+                saveNoteA.onclick = null;
 
-                            saveNoteText.innerText = "Note saved";
-                            saveNoteA.classList.value = "text-gray-500";
+                const db = firebase.database();
+                const savedRef = db.ref(`/users/${user.uid}/savedNotes`);
 
-                            saveNoteA.onclick = unsaveNoteClick;
-                        }
-                    });
+                savedRef.push(noteId).then((r) => {
+                    saveNoteText.innerText = "Note saved";
+                    saveNoteA.classList.value = "text-gray-500";
+
+                    saveNoteA.onclick = function () {
+                        unsaveNoteClick(user)
+                    };
                 });
             }
 
-            function unsaveNoteClick() {
-                // remove note by id and current user's token
-                firebase.auth().currentUser.getIdToken().then(function (idToken) {
-                    saveNoteText.innerText = "Loading...";
-                    saveNoteA.onclick = null;
+            function unsaveNoteClick(user) {
+                saveNoteText.innerText = "Loading...";
+                saveNoteA.onclick = null;
 
-                    unsaveNote(noteId, idToken).then(res => res.json()).then(data => {  // TODO: change to firebase.database();
-                        if (data.success) {
-                            console.log(data);
+                const db = firebase.database();
+                const savedRef = db.ref(`/users/${user.uid}/savedNotes`);
+                let noteRef;
 
+                savedRef.orderByValue().equalTo(noteId)
+                    .once("value", (snapshot) => {
+                        noteRef = Object.keys(snapshot.toJSON())[0];
+                    }).then((r) => {
+                    savedRef.child(noteRef).remove()
+                        .then((r) => {
                             saveNoteText.innerText = "Save note";
                             saveNoteA.classList.value = "group hover:underline hover:font-bold";
 
-                            saveNoteA.onclick = saveNoteClick;
-                        }
-                    });
+                            saveNoteA.onclick = function () {
+                                saveNoteClick(user)
+                            };
+                        });
                 });
             }
 
@@ -77,13 +82,17 @@
                             saveNoteText.innerText = "Note saved";
                             saveNoteA.classList.value = "text-gray-500";
 
-                            saveNoteA.onclick = unsaveNoteClick;
+                            saveNoteA.onclick = function () {
+                                unsaveNoteClick(user)
+                            };
                             return
                         }
                     }
 
                     // note not saved
-                    saveNoteA.onclick = saveNoteClick;
+                    saveNoteA.onclick = function () {
+                        saveNoteClick(user)
+                    };
                 });
             }
 

@@ -2,7 +2,7 @@
     function removePopupE(e) {
         if (!document.getElementById('popup').contains(e.target)) {
             document.getElementById('popup-container').remove();
-            
+
             window.removeEventListener("click", removePopupE);
         }
     }

@@ -6,7 +6,7 @@
     <script src="/javascripts/userData.js"></script>
 
     <script>
-        let UID = '';
+        let UID;
 
         function initiateLoad() {
             firebase.auth().onAuthStateChanged(function (user) {
@@ -71,10 +71,18 @@
                     accInf.appendChild(p_);
 
                     // load saved notes TODO: change to firebase db
-                    getSavedNotes(user.uid).then(res => res.json()).then(data => {
-                        savedNotesDiv.innerHTML = "";
 
-                        if (data[0]) {
+                    const db = firebase.database();
+                    const savedRef = db.ref(`/users/${user.uid}/savedNotes`);
+
+                    savedRef.once("value", (data) => {  // idk if .on is better than .once in this scenario
+                        savedNotesDiv.innerHTML = "";
+                        let savedData = data.val();
+
+                        if (savedData) {
+                            const data = Object.values(savedData);
+
+                            // if there are saved notes
                             $("#savedNoteSearch").removeClass("hidden");
 
                             data.forEach(e => {
@@ -97,7 +105,7 @@
                         } else {
                             savedNotesDiv.appendChild(createParagraph("No saved notes D:"));
                         }
-                    });
+                    })
 
                     // delete account button
                     document.querySelector("#deleteAccount").onclick = function () {
@@ -142,19 +150,19 @@
             };
 
             // save custom UID
-            document.querySelector("#customIDBtn").onclick = function() {
+            document.querySelector("#customIDBtn").onclick = function () {
                 const val = document.querySelector("#customID").value;
 
                 firebase.auth().currentUser.getIdToken().then(function (idToken) {
                     fetch("/api/setCustomId", {
-                        method: "POST",
-                        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-                        body: JSON.stringify({ userToken: idToken, customID: val })}
+                            method: "POST",
+                            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+                            body: JSON.stringify({userToken: idToken, customID: val})
+                        }
                     ).then(r => r.json()).then(data => {
                         if (!data.Error) {
                             alert("Changed your custom user ID");
-                        }
-                        else {
+                        } else {
                             alert(data.Error);
                         }
                     });
@@ -283,7 +291,8 @@
                 </div>
 
                 <div class="flex flex-wrap mb-2">
-                    <label for="yourNotesUrl" class="w-full whitespace-nowrap my-auto ml-1 mr-2">Your notes GitHub url:</label>
+                    <label for="yourNotesUrl" class="w-full whitespace-nowrap my-auto ml-1 mr-2">Your notes GitHub
+                        url:</label>
                     <input id="yourNotesUrl" type="text" placeholder="Your notes GitHub repository url"
                            class="text-gray-700 px-3 py-2 mr-1 w-auto flex-grow rounded-xl">
                     <button class="bg-green-button-color" id="saveNotesUrl">Save</button>

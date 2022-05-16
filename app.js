@@ -171,7 +171,7 @@ app.get("/settings", (req, res) => {
     renderView(req, res, "settings");
 });
 
-// notes
+// note view
 app.get("/note/:uid/:nid", (req, res) => {
     const userId = req.params["uid"];
     const noteId = req.params["nid"];
@@ -317,7 +317,10 @@ app.get("/user/:user", (req, res) => {
     });
 });
 
-// api/saveNote (user token, note id)
+/**
+ * @deprecated since v0.2.2, use firebase.database() instead
+ * api/saveNote (user token, note id)
+ */
 app.post("/api/saveNote", (req, res) => {
     const userToken = req.body.userToken;
     const noteId = req.body.note;
@@ -346,7 +349,10 @@ app.post("/api/saveNote", (req, res) => {
         });
 });
 
-// api/deleteSavedNote (user token, note id)
+/**
+ * @deprecated since v0.2.2, use firebase.database() instead
+ * api/deleteSavedNote (user token, note id)
+ */
 app.post("/api/deleteSavedNote", (req, res) => {
     const userToken = req.body.userToken;
     const noteId = req.body.note;
@@ -399,26 +405,24 @@ app.post("/api/savedNotes", (req, res) => {
     const userRef = usersRef.child(userId);
     const savedRef = userRef.child("savedNotes");
 
-    savedRef
-        .once("value", (data) => {
-            let savedData = data.val();
+    savedRef.once("value", (data) => {
+        let savedData = data.val();
 
-            if (savedData) {
-                const savedValues = Object.keys(savedData).map(function (key) {
-                    return savedData[key];
-                });
+        if (savedData) {
+            const savedValues = Object.keys(savedData).map(function (key) {
+                return savedData[key];
+            });
 
-                return res.send(savedValues);
-            } else {
-                return res.send([null]);
-            }
-        })
-        .catch((e) => {
-            return res.status(400).send({Error: e});
-        });
+            return res.send(savedValues);
+        } else {
+            return res.send([null]);
+        }
+    }).catch((e) => {
+        return res.status(400).send({Error: e});
+    });
 });
 
-// api/setCustomId
+// api/setCustomId (userToken, customId)
 app.post("/api/setCustomId", (req, res) => {
     const userToken = req.body.userToken;
     const customId = req.body.customID;
@@ -449,7 +453,9 @@ app.post("/api/setCustomId", (req, res) => {
                     return res.status(400).send({Error: "Custom id taken!"});
                 }
             }).then(r => {
-                if (e) {return}
+                if (e) {
+                    return
+                }
 
                 const userRef = db.ref(`/users/${user.uid}/info/customID`);
 
@@ -462,13 +468,13 @@ app.post("/api/setCustomId", (req, res) => {
                         }
                     })
                 }).then(r => {
-                        userRef.set(customId).then(r => {
-                            idRef.set(user.uid).then(r => {
-                                return res.status(200).send({Message: "Success"});
-                            });
+                    userRef.set(customId).then(r => {
+                        idRef.set(user.uid).then(r => {
+                            return res.status(200).send({Message: "Success"});
                         });
                     });
                 });
+            });
         });
 });
 
