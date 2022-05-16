@@ -70,7 +70,7 @@
 
                     accInf.appendChild(p_);
 
-                    // load saved notes TODO: change to firebase db
+                    // load saved notes
 
                     const db = firebase.database();
                     const savedRef = db.ref(`/users/${user.uid}/savedNotes`);
@@ -80,7 +80,7 @@
                         let savedData = data.val();
 
                         if (savedData) {
-                            const data = Object.values(savedData);
+                            const data = Object.values(savedData).reverse();
 
                             // if there are saved notes
                             $("#savedNoteSearch").removeClass("hidden");
