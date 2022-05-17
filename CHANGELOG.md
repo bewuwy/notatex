@@ -9,7 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added recently viewed note on home page (synced with the account)
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.2.2] - 2022-5-16
+
+4th release
+
+### Added
+
+- Added **recently viewed note** on home page (synced with the account)
 - Added ability to close a popup by clicking outside it
 
 ### Changed
@@ -20,13 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-- *api/saveNote* and *api/deleteSavedNote* web api 
-
-### Removed
-
-### Fixed
-
-### Security
+- *api/saveNote* and *api/deleteSavedNote* web api
 
 
 ## [0.2.1] - 2022-5-13
