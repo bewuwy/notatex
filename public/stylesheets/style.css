@@ -25,6 +25,7 @@ button {
 }
 
 /* themes */
+
 /* default theme */
 body {
 	@apply bg-slate-800 text-white;
@@ -33,6 +34,10 @@ body {
 	--dark-button-color: #3c91f9;
 	--green-button-color: rgb(34 197 94);
 	--radio-label-color: rgb(37 99 235);
+  
+  --card-color: rgb(2 132 199);
+                    /*rgb(96 165 250);*/
+                    /*rgb(79 70 229);*/
 
 	--note-block-color: rgb(96 165 250);
 	--info-block-color: rgb(20 184 166);
@@ -94,6 +99,8 @@ body {
 /* primary theme */
 .theme-primary {
 	@apply bg-primary-brown;
+  
+  --card-color: rgb(17 24 39);
 }
 
 /* note */
@@ -234,4 +241,26 @@ h6 {
 }
 .popup-content h1 {
 	@apply mb-0;
+}
+
+/* learn note / cards css */
+.-hide .-show-child {
+    @apply hidden;
+}
+.-hide .-hide-child {
+    @apply block;
+}
+.-show-child {
+    @apply block;
+}
+.-hide-child {
+    @apply hidden;
+}
+
+.hidespoilers .spoiler, .hidespoilers .spoiler * {
+    @apply md:!text-transparent md:!bg-gray-700 hover:!text-inherit;
+}
+
+.card-buttons button {
+    @apply bg-gray-700 mx-3 px-6;
 }

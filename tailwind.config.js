@@ -19,7 +19,9 @@ module.exports = {
         'note-block-color': 'var(--note-block-color)',
         'info-block-color': 'var(--info-block-color)',
         'hint-block-color': 'var(--hint-block-color)',
-        'quote-block-color': 'var(--quote-block-color)'
+        'quote-block-color': 'var(--quote-block-color)',
+        
+        'card-color': 'var(--card-color)',
       },
     },
   },
