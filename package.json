@@ -17,8 +17,12 @@
     "firebaseui": "^6.0.1",
     "http-errors": "~1.6.3",
     "jsdom": "^19.0.0",
+    "markdown-it": "^13.0.1",
+    "markdown-it-anchor": "^8.6.4",
+    "markdown-it-table-of-contents": "^0.6.0",
+    "markdown-toc": "^1.2.0",
     "morgan": "~1.9.1",
-    "remarkable": "^2.0.1"
+    "remarkable-plugin-heading-id": "^1.0.0"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.3.1",

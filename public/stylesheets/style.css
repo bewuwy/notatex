@@ -158,14 +158,15 @@ body {
 	@apply bg-green-button-color;
 }
 
-/* note css */
-#note ul {
+/* list css */
+ul {
 	@apply list-disc;
 }
-#note li {
-	@apply ml-4;
+li {
+	@apply ml-6;
 }
 
+/* note css */
 #note h1,
 h2,
 h3,

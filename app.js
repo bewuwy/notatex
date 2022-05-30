@@ -10,10 +10,8 @@ const path = require("path");
 
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
 const axios = require("axios");
-
-const {Remarkable} = require("remarkable");
+const MarkdownIt = require('markdown-it')
 
 const createDOMPurify = require("dompurify");
 const {JSDOM} = require("jsdom");
@@ -111,7 +109,7 @@ function renderView(req, res, view, args = {}, code = 200) {
         const changelog = app.locals.latestVer.changelog;
 
         if (lastUserVer !== latestVer) {
-            const md = new Remarkable();
+            const md = new MarkdownIt();
 
             defArgs["popup"] = {
                 title: "Changelog",
@@ -187,11 +185,15 @@ app.get("/note/:uid/:nid", (req, res) => {
             if (gitRawUrl) {
                 axios.get(gitRawUrl).then((aRes) => {
                     let note = DOMPurify.sanitize(aRes.data.toString());
-                    const md = new Remarkable({
+                    const md = MarkdownIt({
                         html: true,
                         breaks: true
                     });
+                    
+                    md.use(require('markdown-it-anchor'));
+                    md.use(require("markdown-it-table-of-contents"));
 
+                    note = "\n [[toc]] \n" + note;
                     note = customRender.renderAdNotes(note);
                     note = md.render(note);
                     note = DOMPurify.sanitize(note);
@@ -202,8 +204,9 @@ app.get("/note/:uid/:nid", (req, res) => {
                         title: title,
                         userName: userName,
                         uid: userId,
-                        content: note
+                        content: note,
                     });
+
                 }).catch((error) => {
                     console.log(error);
 
@@ -328,7 +331,7 @@ app.get("/user/:user", (req, res) => {
 //         "content": "Mam krótki ||tytuł||, ale pierwszą linijkę już nie hahahahahahahahaahahah nie masz starego lore impus weksel weksel weksel rodo rodo rdo usuwam dane ha ha ha ha ha brak starrego"}
 //     ]
 
-//     const md = new Remarkable();
+//     const md = new MarkdownIt();
 //     const parserRules = [
 //         { pattern: /\|\|(.*?)\|\|/g, replacement: '<span class="spoiler">$1</span>' },
 //         // { pattern: "<h\d>(.*?)<\/h\d>/g", replacement: '<b>$1</b>' },
@@ -354,7 +357,7 @@ app.get("/user/:user", (req, res) => {
 //     //     .then(aRes => {
 //     //         let title = req.params["title"].toString().replace(/-/g, " ");
 //     //
-//     //         const md = new Remarkable();
+//     //         const md = new MarkdownIt();
 //     //         let note = md.render(aRes.data);
 //     //
 //     //         note = note.toString().split("<h1>");
@@ -565,9 +568,23 @@ app.post("/api/deleteAccount", (req, res) => {
     });
 });
 
-// catch 404
+// catch 404 or load note
 app.use(function (req, res) {
-    return renderView(req, res, "404", {}, 404);
+    console.log(req.path.split("/"));
+
+    if (req.path.split("/").length === 3) {
+        userAdmin.getUserByID(req.path.split("/")[1]).then(user => {
+            if (user) {
+                return res.redirect(`/note/${req.path.split("/")[1]}/${req.path.split("/")[2]}`);
+            }
+            else {
+                return renderView(req, res, "404", {}, 404);
+            }
+        });
+    }
+    else {
+        return renderView(req, res, "404", {}, 404);
+    }
 });
 
 module.exports = app;

@@ -119,6 +119,25 @@
             });
         }, false);
     </script>
+
+    <style>
+        .table-of-contents {
+            overflow-y: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease-out;
+        }
+
+        .collapsible:after {
+            content: '\002B'; /* Unicode character for "plus" sign (+) */
+            color: white;
+            float: right;
+        }
+          
+        .active:after {
+            content: "\2212"; /* Unicode character for "minus" sign (-) */
+            /* color: white; */
+        }
+    </style>
 </head>
 <body>
 <!-- TODO: more themes -->
@@ -146,6 +165,8 @@
     </div>
 
     <div id="note">
+        <button class="collapsible w-full text-left inline-block" onclick='content = $(".table-of-contents")[0]; this.classList.toggle("active"); if (content.style.maxHeight){ content.style.maxHeight = null; } else { content.style.maxHeight = content.scrollHeight + "px"; }'>Table of contents</button>
+
         <%- content %>
     </div>
 </div>
