@@ -1,6 +1,9 @@
 .codesandbox
 .eslintignore
 .idea
+.vscode
+
+*.bat
 
 # Logs
 logs
