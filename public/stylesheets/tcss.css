@@ -756,6 +756,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: fit-content;
 }
 
+.max-h-0 {
+  max-height: 0px;
+}
+
 .max-h-full {
   max-height: 100%;
 }
@@ -960,6 +964,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .overflow-y-auto {
   overflow-y: auto;
+}
+
+.overflow-y-hidden {
+  overflow-y: hidden;
 }
 
 .truncate {
@@ -1371,6 +1379,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+html {
+  padding-left: calc(100vw - 100%);
 }
 
 body {

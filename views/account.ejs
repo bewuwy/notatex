@@ -197,6 +197,19 @@
             addSearchById("savedSearch", "savedNotes", "s-");
             addSearchById("yourSearch", "yourNotes", "c-");
         }
+    
+        function toggleElement(contentId, containerId) {
+            let content = $(contentId)[0];
+            console.log(content);
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+
+            $(containerId).toggleClass('!bg-dark-button-color');
+        }
     </script>
 </head>
 <body onload="initiateLoad()">
@@ -208,10 +221,10 @@
 
     <div class="flex flex-wrap justify-center">
 
-        <div class="infoElement !px-0 transition-all duration-200 !bg-dark-button-color hover:bg-dark-button-color"
-             id="savedNotesContainer">
+        <div id="savedNotesContainer"
+             class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color">
             <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
-                onclick="$('#savedNotesContent').toggle(); $('#savedNotesContainer').toggleClass('!bg-dark-button-color');">
+                onclick="toggleElement('#savedNotesContent', '#savedNotesContainer');">
                 <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -220,7 +233,7 @@
                 Saved notes
             </h2>
 
-            <div id="savedNotesContent" class="px-6 md:px-20">
+            <div id="savedNotesContent" class="px-6 md:px-20 max-h-0 overflow-y-hidden" style="transition: max-height 0.35s ease-out;">
                 <div id="savedNoteSearch" class="flex items-center hidden">
                     <input id="savedSearch" type="text" placeholder="Search..."
                            class="text-gray-700 px-3 py-2 w-full rounded-xl">
@@ -238,9 +251,10 @@
             </div>
         </div>
 
-        <div class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color" id="yourNotesContainer">
+        <div id="yourNotesContainer"
+             class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color">
             <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
-                onclick="$('#yourNotesContent').toggle(); $('#yourNotesContainer').toggleClass('!bg-dark-button-color');">
+                onclick="toggleElement('#yourNotesContent', '#yourNotesContainer');">
                 <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -249,7 +263,7 @@
                 Your notes
             </h2>
 
-            <div id="yourNotesContent" class="hidden px-6 md:px-20">
+            <div id="yourNotesContent" class="px-6 md:px-20 max-h-0 overflow-y-hidden" style="transition: max-height 0.35s ease-out;">
                 <div id="yourNotesList">
                     <div id="yourNoteSearch" class="flex items-center">
                         <input id="yourSearch" type="text" placeholder="Search..."
@@ -272,7 +286,7 @@
         <div id="accountSettingsContainer"
              class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color">
             <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
-                onclick="$('#accountSettings').toggle(); $('#accountSettingsContainer').toggleClass('!bg-dark-button-color');">
+                onclick="toggleElement('#accountSettings', '#accountSettingsContainer');">
                 <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -282,7 +296,7 @@
                 Account Settings
             </h2>
 
-            <div id="accountSettings" class="px-6 md:px-20 hidden">
+            <div id="accountSettings" class="px-6 md:px-20 max-h-0 overflow-y-hidden" style="transition: max-height 0.35s ease-out;">
                 <div class="flex flex-wrap mb-2">
                     <label for="customID" class="w-full whitespace-nowrap my-auto ml-1 mr-2">Custom UID:</label>
                     <input id="customID" type="text" placeholder="Your custom user ID (must be unique)"
@@ -300,9 +314,10 @@
             </div>
         </div>
 
-        <div class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color" id="accountInfoContainer">
+        <div id="accountInfoContainer"
+             class="infoElement !px-0 transition-all duration-200 hover:bg-dark-button-color">
             <h2 class="text-2xl px-6 md:px-20 my-0 py-3"
-                onclick="$('#accountInfo').toggle(); $('#accountInfoContainer').toggleClass('!bg-dark-button-color');">
+                onclick="toggleElement('#accountInfo', '#accountInfoContainer');">
                 <svg xmlns="http://www.w3.org/2000/svg" class="inline-block align-text-bottom h-7 w-7" fill="none"
                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -311,7 +326,7 @@
                 Account Info
             </h2>
 
-            <div id="accountInfo" class="px-6 md:px-20 hidden">
+            <div id="accountInfo" class="px-6 md:px-20 max-h-0 overflow-y-hidden" style="transition: max-height 0.35s ease-out;">
                 <p>Loading...</p>
             </div>
         </div>
