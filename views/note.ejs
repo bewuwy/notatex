@@ -20,7 +20,7 @@
             const saveNoteA = document.getElementById("saveNote");
             const saveNoteText = document.getElementById("saveNoteText");
 
-            const noteId = window.location.toString().split("note/")[1];
+            const noteId = window.location.toString().split("note/")[1].split("#")[0];
 
             function saveNoteClick(user) {
                 // save note by id and current user's token
