@@ -12,18 +12,32 @@
                         const applySettingsButton = document.getElementById("savePreferences");
 
                         applySettingsButton.onclick = function () {
+                            // theme setting
                             let themeValue = document.querySelector('input[name="theme"]:checked').value;
-
-                            // save settings and go back to last page
                             setCookie("theme", themeValue, 9999);
 
+                            // toc setting
+                            let tocValue = $("#toggleTOC").prop("checked");
+                            setCookie("toc", tocValue.toString(), 9999);
+
+                            // save settings and go back to last page
                             window.location = getLastPage();
                         };
 
                         // load saved settings on load
+                        
+                        // load theme settings
                         let savedTheme = getCookie("theme") || "default";
                         const selectedTheme = document.querySelector(`input[value=${savedTheme}]`);
                         selectedTheme.checked = true;
+
+                        // load toc settings
+                        let savedToc = getCookie("toc");
+
+                        if (savedToc === null) { savedToc = true; }  // default to true if no cookie
+                        else { savedToc = (getCookie("toc") === "true"); }
+                        
+                        $("#toggleTOC").prop("checked", savedToc);
                     }
                     else {
                         // User is signed out.
@@ -68,6 +82,20 @@
                         <% if (themes[theme]["source"]) { %>
                             <div id="theme-source">Theme inspired from <a class="underline" target="_blank" href="https://github.com/<%- themes[theme]['source'] -%>"><%- themes[theme]["source"] -%></a> github project</div>
                         <% } %>
+
+                        <h4>Table of contents</h4>
+                        <div id="tocSettings" class="flex flex-wrap mb-4">
+                            <label for="toggleTOC" class="flex items-center cursor-pointer" title="Option disabled">
+                                <div class="mr-3">Toggle TOC</div>
+                                
+                                <div class="relative">
+                                  <input type="checkbox" id="toggleTOC" class="sr-only peer" disabled checked>
+                                  <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                  <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition peer-disabled:brightness-75"></div>
+                                </div>
+                            </label>
+
+                        </div>
                     </div>
                 </div>
 

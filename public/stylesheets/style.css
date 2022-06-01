@@ -162,6 +162,11 @@ body {
 	@apply bg-green-button-color;
 }
 
+input:checked ~ .dot {
+	transform: translateX(100%);
+	background-color: var(--dark-button-color);
+}
+
 /* list css */
 ul {
 	@apply list-disc;
