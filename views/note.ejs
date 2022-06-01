@@ -121,18 +121,12 @@
     </script>
 
     <style>
-        .table-of-contents {
-            overflow-y: hidden;
-            max-height: 0;
-            transition: max-height 0.35s ease-out;
-        }
-
         .collapsible:after {
             content: '\002B'; /* Unicode character for "plus" sign (+) */
             color: white;
             float: right;
         }
-          
+        
         .active:after {
             content: "\2212"; /* Unicode character for "minus" sign (-) */
             /* color: white; */
@@ -150,7 +144,7 @@
         <%- include('partials/topBar'); %>
     </div>
 
-    <div class="my-7 md:my-10">
+    <div class="mt-7 mb-3 md:mt-10 mb-4">
         <h1 class="mb-2 md:mb-0"><%= title %></h1>
         <p class="my-0 text-gray-400"><a href="/user/<%= uid %>">Created by <%= userName %></a></p>
 
@@ -165,7 +159,7 @@
     </div>
 
     <div id="note">
-        <button class="collapsible w-full text-left inline-block" onclick='content = $(".table-of-contents")[0]; this.classList.toggle("active"); if (content.style.maxHeight){ content.style.maxHeight = null; } else { content.style.maxHeight = content.scrollHeight + "px"; }'>Table of contents</button>
+        <button class="collapsible w-full text-left inline-block" onclick='$(".table-of-contents").slideToggle();'>Table of contents</button>
 
         <%- content %>
     </div>
