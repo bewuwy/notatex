@@ -216,7 +216,7 @@ h6 {
 
 .table-of-contents {
 	@apply hidden relative -top-6 
-	pt-4 pb-2 px-4 -mb-4 -z-10 
+	pt-4 pb-2 px-4 -mb-4
 	bg-dark-button-color;
 }
 

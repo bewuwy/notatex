@@ -573,16 +573,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   z-index: -10;
 }
 
+.z-10 {
+  z-index: 10;
+}
+
 .z-20 {
   z-index: 20;
 }
 
 .z-50 {
   z-index: 50;
-}
-
-.z-10 {
-  z-index: 10;
 }
 
 .z-40 {
@@ -1190,13 +1190,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: var(--radio-label-color);
 }
 
+.bg-dark-button-color {
+  background-color: var(--dark-button-color);
+}
+
 .bg-gray-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
-}
-
-.bg-dark-button-color {
-  background-color: var(--dark-button-color);
 }
 
 .bg-sky-700 {
@@ -1930,7 +1930,6 @@ li {
 .table-of-contents {
   position: relative;
   top: -1.5rem;
-  z-index: -10;
   margin-bottom: -1rem;
   display: none;
   background-color: var(--dark-button-color);
@@ -2070,11 +2069,6 @@ li {
 }
 
 .active\:brightness-75:active {
-  --tw-brightness: brightness(.75);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.disabled\:brightness-75:disabled {
   --tw-brightness: brightness(.75);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
