@@ -19,6 +19,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+
+## [0.2.3] - 2022-6-10
+
+5th release!
+
+### Added
+
+- TOC to notes
+- Collapse animations in account view
+- Added Google analytics
+
+### Changed
+
+- Markdown parser to *MarkdownIt*
+
+### Fixed
+
+- Github latest release API caching not working
+
+
 ## [0.2.2] - 2022-5-16
 
 4th release
