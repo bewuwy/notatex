@@ -9,7 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added recently viewed note on home page (synced with the account)
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+
+## [0.2.3] - 2022-6-10
+
+5th release!
+
+### Added
+
+- TOC to notes
+- Collapse animations in account view
+- Added Google analytics
+
+### Changed
+
+- Markdown parser to *MarkdownIt*
+
+### Fixed
+
+- Github latest release API caching not working
+
+
+## [0.2.2] - 2022-5-16
+
+4th release
+
+### Added
+
+- Added **recently viewed note** on home page (synced with the account)
 - Added ability to close a popup by clicking outside it
 
 ### Changed
@@ -20,13 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-- *api/saveNote* and *api/deleteSavedNote* web api 
-
-### Removed
-
-### Fixed
-
-### Security
+- *api/saveNote* and *api/deleteSavedNote* web api
 
 
 ## [0.2.1] - 2022-5-13

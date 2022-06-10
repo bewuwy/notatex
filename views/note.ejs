@@ -20,7 +20,7 @@
             const saveNoteA = document.getElementById("saveNote");
             const saveNoteText = document.getElementById("saveNoteText");
 
-            const noteId = window.location.toString().split("note/")[1];
+            const noteId = window.location.toString().split("note/")[1].split("#")[0];
 
             function saveNoteClick(user) {
                 // save note by id and current user's token
@@ -119,6 +119,19 @@
             });
         }, false);
     </script>
+
+    <style>
+        .collapsible:after {
+            content: '\002B'; /* Unicode character for "plus" sign (+) */
+            color: white;
+            float: right;
+        }
+        
+        .active:after {
+            content: "\2212"; /* Unicode character for "minus" sign (-) */
+            /* color: white; */
+        }
+    </style>
 </head>
 <body>
 <!-- TODO: more themes -->
@@ -131,7 +144,7 @@
         <%- include('partials/topBar'); %>
     </div>
 
-    <div class="my-7 md:my-10">
+    <div class="mt-7 mb-3 md:mt-10 mb-4">
         <h1 class="mb-2 md:mb-0"><%= title %></h1>
         <p class="my-0 text-gray-400"><a href="/user/<%= uid %>">Created by <%= userName %></a></p>
 
@@ -146,6 +159,10 @@
     </div>
 
     <div id="note">
+        <button class="collapsible w-full text-left inline-block relative z-10 text-white rounded-none" onclick='$(".table-of-contents").slideToggle();'>
+            Table of contents
+        </button>
+
         <%- content %>
     </div>
 </div>
